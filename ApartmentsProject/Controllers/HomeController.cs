@@ -22,7 +22,6 @@ namespace ApartmentsProject.Controllers
         {
             try
             {
-                // Get apartments with their images
                 var apartments = await _context.Apartments
                     .Include(a => a.Images.OrderBy(img => img.DisplayOrder))
                     .Where(a => a.IsAvailable)
@@ -39,7 +38,6 @@ namespace ApartmentsProject.Controllers
                         Description = a.Description,
                         Price = a.Price,
                         IsAvailable = a.IsAvailable,
-                        // Convert images to ViewModel
                         AllImages = a.Images.Select(img => new ApartmentImageViewModel
                         {
                             Id = img.Id,
@@ -58,21 +56,6 @@ namespace ApartmentsProject.Controllers
                 _logger.LogError(ex, "Error loading apartments");
                 return View(new HomeViewModel { Apartments = new List<ApartmentViewModel>() });
             }
-        }
-
-        private string? GetImageUrl(List<ApartmentImage> images, string imageType, int index = 0)
-        {
-            var image = images
-                .Where(img => img.ImageType == imageType)
-                .Skip(index)
-                .FirstOrDefault();
-
-            return image != null ? $"/uploads/{image.FileName}" : null;
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
     }
 }

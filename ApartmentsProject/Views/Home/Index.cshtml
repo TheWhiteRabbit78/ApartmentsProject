@@ -255,12 +255,21 @@
                     <div class="contact-card">
                         <h3 class="fs-4 fw-semibold mb-3">Pošaljite upit</h3>
                         <form id="contactForm">
-                            <input class="form-control mb-3" placeholder="Ime i prezime" required>
-                            <input type="email" class="form-control mb-3" placeholder="Email adresa" required>
-                            <input type="tel" class="form-control mb-3" placeholder="Telefon">
-                            <textarea class="form-control mb-3" placeholder="Vaša poruka..." rows="4" required></textarea>
-                            <button type="submit" class="btn btn-dark w-100 py-2">Pošalji upit</button>
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" id="apartmentId" name="apartmentId" value="">
+                            <input class="form-control mb-3" id="fullName" name="fullName" placeholder="Ime i prezime *" required>
+                            <input type="email" class="form-control mb-3" id="email" name="email" placeholder="Email adresa *" required>
+                            <input type="tel" class="form-control mb-3" id="phone" name="phone" placeholder="Telefon">
+                            <textarea class="form-control mb-3" id="message" name="message" placeholder="Vaša poruka... *" rows="4" required></textarea>
+                            <button type="submit" class="btn btn-dark w-100 py-2" id="submitBtn">
+                                <span class="submit-text">Pošalji upit</span>
+                                <span class="submit-loading d-none">
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                    Šalje...
+                                </span>
+                            </button>
                         </form>
+                        <div id="contactMessage" class="mt-3"></div>
                     </div>
                 </div>
                 <div class="col-lg-7">

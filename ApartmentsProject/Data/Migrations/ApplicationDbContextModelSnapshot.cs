@@ -53,7 +53,7 @@ namespace ApartmentsProject.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Apartments");
+                    b.ToTable("Apartments", (string)null);
 
                     b.HasData(
                         new
@@ -110,7 +110,7 @@ namespace ApartmentsProject.Data.Migrations
 
                     b.HasIndex("ApartmentId");
 
-                    b.ToTable("ApartmentImages");
+                    b.ToTable("ApartmentImages", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
