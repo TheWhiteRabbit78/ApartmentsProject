@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ApartmentsProject.Models.Apartment>
+
+@{
+    ViewData["Title"] = "Manage Apartments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Manage Apartments</h2>
+        <div>
+            <a asp-action="Users" class="btn btn-info">Manage Users</a>
+            <a asp-action="Create" class="btn btn-primary">Add New Apartment</a>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var apartment in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@apartment.Title</h5>
+                        <p class="card-text">
+                            <small class="text-muted">@apartment.Rooms</small><br>
+                            <strong>€@apartment.Price.ToString("N0")</strong><br>
+                            <span class="badge @(apartment.IsAvailable ? "bg-success" : "bg-danger")">
+                                @(apartment.IsAvailable ? "Available" : "Sold")
+                            </span><br>
+                            <small class="text-muted">Images: @apartment.Images.Count</small>
+                        </p>
+                        <div class="btn-group w-100">
+                            <a asp-action="Details" asp-route-id="@apartment.Id" class="btn btn-outline-primary btn-sm">View</a>
+                            <a asp-action="Edit" asp-route-id="@apartment.Id" class="btn btn-outline-secondary btn-sm">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@apartment.Id" class="btn btn-outline-danger btn-sm">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
