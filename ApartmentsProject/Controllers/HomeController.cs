@@ -1,7 +1,4 @@
-using System.Diagnostics;
 using ApartmentsProject.Data;
-using ApartmentsProject.Models;
-using ApartmentsProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,52 +6,56 @@ namespace ApartmentsProject.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context, IEmailService emailService)
         {
-            _logger = logger;
             _context = context;
+            _emailService = emailService;
         }
 
         public async Task<IActionResult> Index()
         {
+            var apartments = await _context.Apartments
+                .Include(a => a.Images.OrderBy(img => img.DisplayOrder))
+                .Where(a => a.IsAvailable)
+                .OrderBy(a => a.Id)
+                .ToListAsync();
+
+            return View(apartments);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitContact(string fullName, string email,
+            string phone, string message, int? apartmentId)
+        {
             try
             {
-                var apartments = await _context.Apartments
-                    .Include(a => a.Images.OrderBy(img => img.DisplayOrder))
-                    .Where(a => a.IsAvailable)
-                    .OrderBy(a => a.Id)
-                    .ToListAsync();
-
-                var viewModel = new HomeViewModel
+                var apartmentInfo = "";
+                if (apartmentId.HasValue)
                 {
-                    Apartments = apartments.Select(a => new ApartmentViewModel
-                    {
-                        Id = a.Id,
-                        Title = a.Title,
-                        Rooms = a.Rooms,
-                        Description = a.Description,
-                        Price = a.Price,
-                        IsAvailable = a.IsAvailable,
-                        AllImages = a.Images.Select(img => new ApartmentImageViewModel
-                        {
-                            Id = img.Id,
-                            Url = $"/uploads/{img.FileName}",
-                            Type = img.ImageType,
-                            Caption = img.Caption ?? "",
-                            DisplayOrder = img.DisplayOrder
-                        }).OrderBy(img => img.DisplayOrder).ToList()
-                    }).ToList()
-                };
+                    var apartment = await _context.Apartments.FindAsync(apartmentId);
+                    apartmentInfo = $"Apartment: {apartment?.Title}\n\n";
+                }
 
-                return View(viewModel);
+                var emailBody = $@"
+                    <h3>New Contact Form Submission</h3>
+                    <p><strong>Name:</strong> {fullName}</p>
+                    <p><strong>Email:</strong> {email}</p>
+                    <p><strong>Phone:</strong> {phone}</p>
+                    {(apartmentId.HasValue ? $"<p><strong>Interested in:</strong> {apartmentInfo}</p>" : "")}
+                    <p><strong>Message:</strong><br/>{message}</p>
+                ";
+
+                await _emailService.SendEmailAsync("info@yoursite.com",
+                    "New Contact Form Submission", emailBody);
+
+                return Json(new { success = true, message = "Poruka je uspješno poslana!" });
             }
-            catch (Exception ex)
+            catch
             {
-                _logger.LogError(ex, "Error loading apartments");
-                return View(new HomeViewModel { Apartments = new List<ApartmentViewModel>() });
+                return Json(new { success = false, message = "Greška pri slanju poruke." });
             }
         }
     }
