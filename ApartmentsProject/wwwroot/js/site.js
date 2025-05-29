@@ -1,222 +1,215 @@
-﻿// ApartmentsProject JavaScript - Simplified
+﻿// wwwroot/js/site.js
+class ApartmentLightbox {
+    constructor() {
+        this.images = [];
+        this.currentIndex = 0;
+        this.init();
+    }
 
-$(document).ready(function () {
-    // Add current year to footer
+    init() {
+        this.createLightboxHTML();
+        this.bindEvents();
+    }
+
+    createLightboxHTML() {
+        if (document.getElementById('lightbox')) return;
+
+        const lightbox = document.createElement('div');
+        lightbox.id = 'lightbox';
+        lightbox.className = 'lightbox';
+        lightbox.innerHTML = `
+            <div class="lightbox-content">
+                <img id="lightbox-image" class="lightbox-image" src="" alt="">
+                <button id="lightbox-close" class="lightbox-close">&times;</button>
+                <button id="lightbox-prev" class="lightbox-nav lightbox-prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button id="lightbox-next" class="lightbox-nav lightbox-next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <div id="lightbox-info" class="lightbox-info">
+                    <h5 id="lightbox-title"></h5>
+                    <p id="lightbox-caption"></p>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(lightbox);
+    }
+
+    bindEvents() {
+        $(document).on('click', '.lightbox-trigger', (e) => this.open(e));
+        $('#lightbox-close').on('click', () => this.close());
+        $('#lightbox-prev').on('click', () => this.prev());
+        $('#lightbox-next').on('click', () => this.next());
+        $('#lightbox-image').on('click', () => this.toggleZoom());
+        $('#lightbox').on('click', (e) => {
+            if (e.target.id === 'lightbox') this.close();
+        });
+        $(document).on('keydown', (e) => this.handleKeyboard(e));
+    }
+
+    open(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const $trigger = $(e.currentTarget);
+        const apartmentId = $trigger.data('apartment-id');
+        const imageIndex = $trigger.data('image-index');
+
+        this.loadApartmentImages(apartmentId);
+        this.currentIndex = imageIndex || 0;
+        this.updateImage();
+        this.show();
+    }
+
+    loadApartmentImages(apartmentId) {
+        this.images = [];
+        $(`.lightbox-trigger[data-apartment-id="${apartmentId}"]`).each((_, el) => {
+            const $el = $(el);
+            this.images.push({
+                src: $el.attr('src'),
+                caption: $el.data('caption') || '',
+                type: $el.data('type') || '',
+                title: $el.data('title')
+            });
+        });
+    }
+
+    updateImage() {
+        if (this.images.length === 0) return;
+
+        const img = this.images[this.currentIndex];
+        $('#lightbox-image').attr('src', img.src).removeClass('zoomed');
+        $('#lightbox-title').text(img.title);
+        $('#lightbox-caption').text(
+            `${img.type}${img.caption ? ' - ' + img.caption : ''}`
+        );
+
+        $('#lightbox-prev, #lightbox-next').toggle(this.images.length > 1);
+    }
+
+    show() {
+        $('#lightbox').addClass('active');
+        $('body').css('overflow', 'hidden');
+    }
+
+    close() {
+        $('#lightbox').removeClass('active');
+        $('body').css('overflow', 'auto');
+        $('#lightbox-image').removeClass('zoomed');
+    }
+
+    prev() {
+        this.currentIndex = (this.currentIndex - 1 + this.images.length)
+            % this.images.length;
+        this.updateImage();
+    }
+
+    next() {
+        this.currentIndex = (this.currentIndex + 1) % this.images.length;
+        this.updateImage();
+    }
+
+    toggleZoom() {
+        $('#lightbox-image').toggleClass('zoomed');
+    }
+
+    handleKeyboard(e) {
+        if (!$('#lightbox').hasClass('active')) return;
+
+        switch (e.which) {
+            case 27: this.close(); break;
+            case 37: if (this.images.length > 1) this.prev(); break;
+            case 39: if (this.images.length > 1) this.next(); break;
+        }
+    }
+}
+
+$(document).ready(() => {
+    new ApartmentLightbox();
+
     $('#currentYear').text(new Date().getFullYear());
 
-    // Smooth scroll for navigation
     $('.scroll-link').on('click', function (e) {
         e.preventDefault();
-        var target = $(this).attr('href');
+        const target = $(this).attr('href');
         $('html, body').animate({
             scrollTop: $(target).offset().top - 70
         }, 50);
         $('.navbar-collapse').collapse('hide');
     });
 
-    // Contact button in modal leads to contact section and sets apartment ID
     $('.contact-button').on('click', function () {
         const apartmentId = $(this).data('apartment-id');
-        const apartmentTitle = $(this).closest('.modal').find('.modal-title').text();
+        const apartmentTitle = $(this).data('apartment-title');
 
-        // Close the modal first
         $(this).closest('.modal').modal('hide');
 
-        // Wait for modal to close, then scroll and populate form
-        setTimeout(function () {
-            // Set apartment ID
+        setTimeout(() => {
             $('#apartmentId').val(apartmentId);
+            const currentMsg = $('#message').val().trim();
+            const newMsg = `Zanima me stan: ${apartmentTitle}`;
 
-            // Pre-fill message with apartment interest
-            const currentMessage = $('#message').val();
-            const apartmentMessage = `Zanima me stan: ${apartmentTitle}`;
-
-            if (currentMessage.trim() === '') {
-                $('#message').val(apartmentMessage);
-            } else if (!currentMessage.includes(apartmentTitle)) {
-                $('#message').val(currentMessage + '\n\n' + apartmentMessage);
+            if (!currentMsg) {
+                $('#message').val(newMsg);
+            } else if (!currentMsg.includes(apartmentTitle)) {
+                $('#message').val(`${currentMsg}\n\n${newMsg}`);
             }
 
-            // Scroll to contact form
             $('html, body').animate({
                 scrollTop: $('#contact').offset().top - 70
-            }, 800);
-
-            // Optional: Focus on the name field
+            }, 50);
             $('#fullName').focus();
-        }, 300); // Wait for modal close animation
+        }, 300);
     });
 
-    // Handle contact form submission
     $('#contactForm').on('submit', function (e) {
         e.preventDefault();
 
-        const submitBtn = $('#submitBtn');
-        const submitText = $('.submit-text');
-        const submitLoading = $('.submit-loading');
-        const messageDiv = $('#contactMessage');
+        const $btn = $('#submitBtn');
+        const $text = $('.submit-text');
+        const $loading = $('.submit-loading');
+        const $msg = $('#contactMessage');
 
-        // Show loading state
-        submitBtn.prop('disabled', true);
-        submitText.addClass('d-none');
-        submitLoading.removeClass('d-none');
-        messageDiv.empty();
+        $btn.prop('disabled', true);
+        $text.addClass('d-none');
+        $loading.removeClass('d-none');
+        $msg.empty();
 
-        // Get form data
-        const formData = {
-            fullName: $("#fullName").val(),
-            email: $("#email").val(),
-            phone: $("#phone").val(),
-            message: $("#message").val(),
-            apartmentId: $("#apartmentId").val() || null
-        };
-
-        // Submit via AJAX
         $.ajax({
             url: '/Home/SubmitContact',
             type: 'POST',
-            data: formData,
-            beforeSend: function (xhr) {
+            data: {
+                fullName: $('#fullName').val(),
+                email: $('#email').val(),
+                phone: $('#phone').val(),
+                message: $('#message').val(),
+                apartmentId: $('#apartmentId').val() || null
+            },
+            beforeSend: xhr => {
                 xhr.setRequestHeader('RequestVerificationToken',
                     $('input[name="__RequestVerificationToken"]').val());
             },
-            success: function (response) {
+            success: response => {
                 if (response.success) {
-                    messageDiv.html(`<div class="alert alert-success">${response.message}</div>`);
+                    $msg.html(`<div class="alert alert-success">
+                       ${response.message}</div>`);
                     document.getElementById('contactForm').reset();
-                    $('#apartmentId').val(''); // Clear apartment ID too
+                    $('#apartmentId').val('');
                 } else {
-                    messageDiv.html(`<div class="alert alert-danger">${response.message}</div>`);
+                    $msg.html(`<div class="alert alert-danger">
+                       ${response.message}</div>`);
                 }
             },
-            error: function (xhr, status, error) {
-                console.log('Error details:', xhr.responseText); // Debug line
-                messageDiv.html('<div class="alert alert-danger">Došlo je do greške. Molimo pokušajte ponovo.</div>');
+            error: () => {
+                $msg.html(`<div class="alert alert-danger">
+                   Došlo je do greške. Molimo pokušajte ponovo.</div>`);
             },
-            complete: function () {
-                // Reset button state
-                submitBtn.prop('disabled', false);
-                submitText.removeClass('d-none');
-                submitLoading.addClass('d-none');
+            complete: () => {
+                $btn.prop('disabled', false);
+                $text.removeClass('d-none');
+                $loading.addClass('d-none');
             }
         });
     });
-
-    // LIGHTBOX FUNCTIONALITY
-    let currentApartmentImages = [];
-    let currentImageIndex = 0;
-
-    // Open lightbox when clicking on carousel images
-    $(document).on('click', '.lightbox-trigger', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const apartmentId = $(this).data('apartment-id');
-        const imageIndex = $(this).data('image-index');
-        const title = $(this).data('title');
-
-        // Get all images for this apartment
-        currentApartmentImages = [];
-        $(`.lightbox-trigger[data-apartment-id="${apartmentId}"]`).each(function () {
-            currentApartmentImages.push({
-                src: $(this).attr('src'),
-                caption: $(this).data('caption') || '',
-                type: $(this).data('type') || '',
-                title: $(this).data('title')
-            });
-        });
-
-        currentImageIndex = imageIndex;
-        openLightbox();
-    });
-
-    function openLightbox() {
-        if (currentApartmentImages.length === 0) return;
-
-        const currentImage = currentApartmentImages[currentImageIndex];
-
-        $('#lightbox-image').attr('src', currentImage.src);
-        $('#lightbox-title').text(currentImage.title);
-        $('#lightbox-caption').text(`${currentImage.type}${currentImage.caption ? ' - ' + currentImage.caption : ''}`);
-
-        // Show/hide navigation arrows
-        if (currentApartmentImages.length > 1) {
-            $('#lightbox-prev, #lightbox-next').show();
-        } else {
-            $('#lightbox-prev, #lightbox-next').hide();
-        }
-
-        $('#lightbox').addClass('active');
-        $('body').addClass('lightbox-open');
-
-        // Prevent body scroll
-        $('body').css('overflow', 'hidden');
-    }
-
-    function closeLightbox() {
-        $('#lightbox').removeClass('active');
-        $('body').removeClass('lightbox-open');
-        $('body').css('overflow', 'auto');
-
-        // Reset zoom
-        $('#lightbox-image').removeClass('zoomed');
-    }
-
-    // Close lightbox
-    $('#lightbox-close').click(closeLightbox);
-
-    // Close lightbox when clicking outside image
-    $('#lightbox').click(function (e) {
-        if (e.target === this) {
-            closeLightbox();
-        }
-    });
-
-    // Navigation
-    $('#lightbox-prev').click(function () {
-        currentImageIndex = (currentImageIndex - 1 + currentApartmentImages.length) % currentApartmentImages.length;
-        updateLightboxImage();
-    });
-
-    $('#lightbox-next').click(function () {
-        currentImageIndex = (currentImageIndex + 1) % currentApartmentImages.length;
-        updateLightboxImage();
-    });
-
-    function updateLightboxImage() {
-        const currentImage = currentApartmentImages[currentImageIndex];
-        $('#lightbox-image').attr('src', currentImage.src);
-        $('#lightbox-title').text(currentImage.title);
-        $('#lightbox-caption').text(`${currentImage.type}${currentImage.caption ? ' - ' + currentImage.caption : ''}`);
-
-        // Reset zoom when changing images
-        $('#lightbox-image').removeClass('zoomed');
-    }
-
-    // Zoom functionality
-    $('#lightbox-image').click(function () {
-        $(this).toggleClass('zoomed');
-    });
-
-    // Keyboard navigation
-    $(document).keydown(function (e) {
-        if (!$('#lightbox').hasClass('active')) return;
-
-        switch (e.which) {
-            case 27: // ESC
-                closeLightbox();
-                break;
-            case 37: // Left arrow
-                if (currentApartmentImages.length > 1) {
-                    $('#lightbox-prev').click();
-                }
-                break;
-            case 39: // Right arrow
-                if (currentApartmentImages.length > 1) {
-                    $('#lightbox-next').click();
-                }
-                break;
-        }
-    });
-
-}); // End document ready
+});

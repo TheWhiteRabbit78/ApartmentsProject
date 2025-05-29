@@ -1,4 +1,5 @@
-﻿@{
+﻿<!-- Views/Admin/AddImage.cshtml -->
+@{
     ViewData["Title"] = "Add Image";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -6,61 +7,81 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Add Image to @ViewBag.ApartmentTitle</h2>
-        <a asp-action="Details" asp-route-id="@ViewBag.ApartmentId" class="btn btn-secondary">Back</a>
+        <a asp-action="Details" asp-route-id="@ViewBag.ApartmentId"
+           class="btn btn-secondary">Back</a>
     </div>
 
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <form asp-action="AddImage" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="apartmentId" value="@ViewBag.ApartmentId" />
+                    <form asp-action="AddImage" method="post"
+                          enctype="multipart/form-data">
+                        <input type="hidden" name="apartmentId"
+                               value="@ViewBag.ApartmentId" />
 
                         <div class="mb-3">
-                            <label for="imageFile" class="form-label">Select Image</label>
-                            <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*" required />
+                            <label for="imageFile" class="form-label">
+                                Select Image
+                            </label>
+                            <input type="file" class="form-control"
+                                   id="imageFile" name="imageFile"
+                                   accept="image/*" required />
                         </div>
 
                         <div class="mb-3">
-                            <label for="imageType" class="form-label">Image Type</label>
-                            <select class="form-select" id="imageType" name="imageType" required>
+                            <label for="imageType" class="form-label">
+                                Image Type
+                            </label>
+                            <select class="form-select" id="imageType"
+                                    name="imageType" required>
                                 <option value="">Select type...</option>
-                                <option value="main">Main Image</option>
-                                <option value="floorplan">Floor Plan</option>
-                                <option value="interior">Interior</option>
-                                <option value="exterior">Exterior</option>
-                                <option value="other">Other</option>
+                                <option value="hero">Hero Image</option>
+                                <option value="gallery">Gallery</option>
                             </select>
                         </div>
 
                         <div class="mb-3">
-                            <label for="caption" class="form-label">Caption (Optional)</label>
-                            <input type="text" class="form-control" id="caption" name="caption" placeholder="Brief description of image" />
+                            <label for="caption" class="form-label">
+                                Caption (Optional)
+                            </label>
+                            <input type="text" class="form-control"
+                                   id="caption" name="caption"
+                                   placeholder="Brief description" />
                         </div>
 
                         <div class="mb-3">
-                            <label for="displayOrder" class="form-label">Display Order</label>
-                            <input type="number" class="form-control" id="displayOrder" name="displayOrder" value="0" min="0" />
+                            <label for="displayOrder" class="form-label">
+                                Display Order
+                            </label>
+                            <input type="number" class="form-control"
+                                   id="displayOrder" name="displayOrder"
+                                   value="0" min="0" />
                             <div class="form-text">Lower numbers appear first</div>
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="submit" class="btn btn-primary">Upload Image</button>
-                            <a asp-action="Details" asp-route-id="@ViewBag.ApartmentId" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">
+                                Upload Image
+                            </button>
+                            <a asp-action="Details"
+                               asp-route-id="@ViewBag.ApartmentId"
+                               class="btn btn-secondary">Cancel</a>
                         </div>
                     </form>
+
+                    @if (ViewData.ModelState.ErrorCount > 0)
+                    {
+                        <div class="alert alert-danger mt-3">
+                            @foreach (var error in ViewData.ModelState.Values
+                                                    .SelectMany(v => v.Errors))
+                            {
+                                <div>@error.ErrorMessage</div>
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-@if (ViewData.ModelState.ErrorCount > 0)
-{
-    <div class="alert alert-danger mt-3">
-        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-        {
-            <div>@error.ErrorMessage</div>
-        }
-    </div>
-}
