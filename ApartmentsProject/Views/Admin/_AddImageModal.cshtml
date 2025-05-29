@@ -1,0 +1,42 @@
+﻿@model ApartmentsProject.Models.ApartmentImage
+
+<div class="modal-header">
+    <h5 class="modal-title">Dodaj sliku za @ViewBag.ApartmentTitle</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<form asp-action="AddImage" method="post" enctype="multipart/form-data" class="modal-form">
+    <div class="modal-body">
+        <input type="hidden" name="apartmentId" value="@ViewBag.ApartmentId" />
+
+        <div class="mb-3">
+            <label for="imageFile" class="form-label">Odaberite sliku</label>
+            <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*" required />            
+        </div>
+
+        <div class="mb-3">
+            <label for="imageType" class="form-label">Tip slike</label>
+            <select class="form-select" id="imageType" name="imageType" required>
+                <option value="">Odaberite tip...</option>
+                <option value="hero">Glavna slika</option>
+                <option value="gallery">Galerija</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="caption" class="form-label">Opis (neobavezno)</label>
+            <input type="text" class="form-control" id="caption" name="caption" placeholder="Kratki opis" />
+        </div>
+
+        <div class="mb-3">
+            <label for="displayOrder" class="form-label">Redoslijed prikaza</label>
+            <input type="number" class="form-control" id="displayOrder" name="displayOrder" value="0" min="0" />
+            <div class="form-text">Manji brojevi se prikazuju prvi</div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+        <button type="submit" class="btn btn-primary">Učitaj sliku</button>
+    </div>
+</form>

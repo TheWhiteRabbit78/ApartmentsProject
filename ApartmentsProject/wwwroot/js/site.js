@@ -223,8 +223,65 @@ $(document).ready(() => {
         }
     });
 
-    // Prevent button clicks from triggering card click
     $('.admin-apartment-card .btn').on('click', function (e) {
         e.stopPropagation();
     });
+
+    $(document).on('submit', '.modal-form', function (e) {
+        e.preventDefault();
+
+        var form = $(this);
+        var formData = new FormData(this);
+
+        // Show loading state
+        var submitBtn = form.find('button[type="submit"]');
+        var originalText = submitBtn.html();
+        submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Šalje...');
+
+        $.ajax({
+            type: form.attr('method'),
+            url: form.attr('action'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.isValid) {
+                    $('#genericModal').modal('hide');
+                    showNotification(response.message, 'success');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    $('#modal-content').html(response.html);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                showNotification('Došlo je do greške. Molimo pokušajte ponovo.', 'danger');
+            },
+            complete: function () {
+                // Reset button state
+                submitBtn.prop('disabled', false).html(originalText);
+            }
+        });
+    });
+
+    $(document).on('shown.bs.modal', '#genericModal', function () {
+        // Parse validation for any forms in the modal
+        $.validator.unobtrusive.parse('#genericModal');
+
+        // Focus on first input
+        $('#genericModal').find('input:first').focus();
+    });
+
+    $(document).on('hidden.bs.modal', '#genericModal', function () {
+        $('#modal-content').empty();
+    });
 });
+
+function showNotification(message, type) {
+    const alert = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                  </div>`;
+    $('#notification-area').html(alert);
+    setTimeout(() => $('.alert').fadeOut(), 5000);
+}

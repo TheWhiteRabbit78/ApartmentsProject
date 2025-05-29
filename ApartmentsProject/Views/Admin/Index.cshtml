@@ -8,19 +8,21 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Upravljanje Stanovima</h2>
-        <a asp-action="Create" class="btn btn-primary">Dodaj Novi Stan</a>
+        <button type="button" class="btn btn-primary" onclick="openApartmentModal(0)">
+            <i class="fas fa-plus me-2"></i>Dodaj Novi Stan
+        </button>
     </div>
 
-    <div class="row g-4">
+    <div id="notification-area"></div>
+
+    <div class="row g-4" id="apartments-container">
         @foreach (var apartment in Model)
         {
             <div class="col-md-6 col-lg-4 col-xl-3">
-                <div class="admin-apartment-card apartment-card" data-apartment-id="@apartment.Id">
+                <div class="admin-apartment-card apartment-card">
                     @if (!string.IsNullOrEmpty(apartment.HeroImageUrl))
                     {
-                        <img src="@apartment.HeroImageUrl"
-                             alt="@apartment.Title"
-                             class="card-img-top">
+                        <img src="@apartment.HeroImageUrl" alt="@apartment.Title" class="card-img-top">
                     }
                     else
                     {
@@ -47,21 +49,21 @@
                         <div class="mt-auto">
                             <div class="d-grid gap-2">
                                 <div class="btn-group" role="group">
-                                    <a asp-action="Edit" asp-route-id="@apartment.Id"
-                                       class="btn btn-outline-secondary btn-sm">
+                                    <button type="button" class="btn btn-outline-info btn-sm" onclick="openApartmentDetailsModal(@apartment.Id)">
+                                        <i class="fas fa-eye me-1"></i>Detalji
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="openApartmentModal(@apartment.Id)">
                                         <i class="fas fa-edit me-1"></i>Uredi
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@apartment.Id"
-                                       class="btn btn-outline-danger btn-sm">
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="openDeleteApartmentModal(@apartment.Id)">
                                         <i class="fas fa-trash me-1"></i>Obriši
-                                    </a>
+                                    </button>
                                 </div>
                                 @if (apartment.Images.Count == 0)
                                 {
-                                    <a asp-action="AddImage" asp-route-id="@apartment.Id"
-                                       class="btn btn-outline-info btn-sm">
+                                    <button type="button" class="btn btn-outline-info btn-sm" onclick="openAddImageModal(@apartment.Id)">
                                         <i class="fas fa-plus me-1"></i>Dodaj sliku
-                                    </a>
+                                    </button>
                                 }
                             </div>
                         </div>
@@ -76,10 +78,89 @@
         <div class="admin-empty-state">
             <i class="fas fa-home fa-3x"></i>
             <h3 class="text-muted">Nema stanova</h3>
-            <p class="text-muted">Počnite stvaranjem prvog stana.</p>
-            <a asp-action="Create" class="btn btn-primary">
-                <i class="fas fa-plus me-2"></i>Stvori prvi stan
-            </a>
+            <p class="text-muted">Počnite dodavanjem prvog stana.</p>
+            <button type="button" class="btn btn-primary" onclick="openApartmentModal(0)">
+                <i class="fas fa-plus me-2"></i>Dodaj prvi stan
+            </button>
         </div>
     }
 </div>
+
+<!-- Generic Modal Container -->
+<div class="modal fade" id="genericModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="modal-content">
+            <!-- Dynamic content will be loaded here -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Generic Modal Functions
+        function openApartmentModal(id = 0) {
+            $.get('@Url.Action("GetApartmentModal", "Admin")', { id: id }, function (data) {
+                $('#modal-content').html(data);
+                $('#genericModal').modal('show');
+            });
+        }
+
+        function openApartmentDetailsModal(id) {
+            $.get('@Url.Action("GetApartmentDetailsModal", "Admin")', { id: id }, function (data) {
+                $('#modal-content').html(data);
+                $('#genericModal').modal('show');
+            });
+        }
+
+        function openDeleteApartmentModal(id) {
+            $.get('@Url.Action("GetDeleteApartmentModal", "Admin")', { id: id }, function (data) {
+                $('#modal-content').html(data);
+                $('#genericModal').modal('show');
+            });
+        }
+
+        function openAddImageModal(id) {
+            $.get('@Url.Action("GetAddImageModal", "Admin")', { id: id }, function (data) {
+                $('#modal-content').html(data);
+                $('#genericModal').modal('show');
+            });
+        }
+
+        // Form submission handler
+        $(document).on('submit', '.modal-form', function (e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.isValid) {
+                        $('#genericModal').modal('hide');
+                        showNotification(response.message, 'success');
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        $('#modal-content').html(response.html);
+                    }
+                },
+                error: function () {
+                    showNotification('Došlo je do greške. Molimo pokušajte ponovo.', 'danger');
+                }
+            });
+        });
+
+        function showNotification(message, type) {
+            const alert = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                          </div>`;
+            $('#notification-area').html(alert);
+            setTimeout(() => $('.alert').fadeOut(), 5000);
+        }
+    </script>
+}

@@ -9,10 +9,14 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Upravljanje korisnicima</h2>
         <div>
-            <a asp-action="CreateUser" class="btn btn-primary">Stvori novog korisnika</a>
+            <button type="button" class="btn btn-primary" onclick="openCreateUserModal()">
+                <i class="fas fa-plus me-2"></i>Stvori novog korisnika
+            </button>
             <a asp-action="Index" class="btn btn-secondary">Povratak na stanove</a>
         </div>
     </div>
+
+    <div id="notification-area"></div>
 
     <div class="card">
         <div class="card-body">
@@ -38,13 +42,10 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <form asp-action="DeleteUser" method="post" class="d-inline">
-                                        <input type="hidden" name="id" value="@user.Id" />
-                                        <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('Obrisati ovog korisnika?')">
-                                            Obriši
-                                        </button>
-                                    </form>
+                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                            onclick="openDeleteUserModal('@user.Id')">
+                                        <i class="fas fa-trash me-1"></i>Obriši
+                                    </button>
                                 </td>
                             </tr>
                         }
@@ -54,3 +55,67 @@
         </div>
     </div>
 </div>
+
+<!-- Generic Modal Container -->
+<div class="modal fade" id="genericModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="modal-content">
+            <!-- Dynamic content will be loaded here -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openCreateUserModal() {
+            $.get('@Url.Action("GetCreateUserModal", "Admin")', function (data) {
+                $('#modal-content').html(data);
+                $('#genericModal').modal('show');
+            });
+        }
+
+        function openDeleteUserModal(id) {
+            $.get('@Url.Action("GetDeleteUserModal", "Admin")', { id: id }, function (data) {
+                $('#modal-content').html(data);
+                $('#genericModal').modal('show');
+            });
+        }
+
+        // Form submission handler
+        $(document).on('submit', '.modal-form', function (e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.isValid) {
+                        $('#genericModal').modal('hide');
+                        showNotification(response.message, 'success');
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        $('#modal-content').html(response.html);
+                    }
+                },
+                error: function () {
+                    showNotification('Došlo je do greške. Molimo pokušajte ponovo.', 'danger');
+                }
+            });
+        });
+
+        function showNotification(message, type) {
+            const alert = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                          </div>`;
+            $('#notification-area').html(alert);
+            setTimeout(() => $('.alert').fadeOut(), 5000);
+        }
+    </script>
+}
