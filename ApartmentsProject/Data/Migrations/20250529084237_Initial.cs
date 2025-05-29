@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace ApartmentsProject.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,15 +51,6 @@ namespace ApartmentsProject.Data.Migrations
                         principalTable: "Apartments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Apartments",
-                columns: new[] { "Id", "CreatedAt", "Description", "IsAvailable", "Price", "Rooms", "Title" },
-                values: new object[,]
-                {
-                    { 1, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Prostran stan s modernim dizajnom, idealan za mlade obitelji.", true, 180000m, "2+1 (2 spavaće sobe)", "Stan A1 - 65m²" },
-                    { 2, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Luksuzni stan s tri spavaće sobe, savršen za veće obitelji.", true, 220000m, "3+1 (3 spavaće sobe)", "Stan B2 - 78m²" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -47,6 +47,8 @@ app.MapControllerRoute(
 app.MapRazorPages()
    .WithStaticAssets();
 
+// Seed data
 await DbSeeder.SeedAdminUser(app.Services);
+await DbSeeder.SeedApartments(app.Services);
 
 app.Run();

@@ -1,5 +1,4 @@
-﻿// Data/ApplicationDbContext.cs
-using ApartmentsProject.Models;
+﻿using ApartmentsProject.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,28 +23,5 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .WithMany(apt => apt.Images)
             .HasForeignKey(img => img.ApartmentId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Apartment>().HasData(
-            new Apartment
-            {
-                Id = 1,
-                Title = "Stan A1 - 65m²",
-                Rooms = "2+1 (2 spavaće sobe)",
-                Description = "Prostran stan s modernim dizajnom, idealan za mlade obitelji.",
-                Price = 180000,
-                IsAvailable = true,
-                CreatedAt = new DateTime(2024, 1, 1)
-            },
-            new Apartment
-            {
-                Id = 2,
-                Title = "Stan B2 - 78m²",
-                Rooms = "3+1 (3 spavaće sobe)",
-                Description = "Luksuzni stan s tri spavaće sobe, savršen za veće obitelji.",
-                Price = 220000,
-                IsAvailable = true,
-                CreatedAt = new DateTime(2024, 1, 1)
-            }
-        );
     }
 }

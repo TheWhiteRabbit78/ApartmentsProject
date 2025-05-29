@@ -54,28 +54,6 @@ namespace ApartmentsProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Apartments");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Prostran stan s modernim dizajnom, idealan za mlade obitelji.",
-                            IsAvailable = true,
-                            Price = 180000m,
-                            Rooms = "2+1 (2 spavaće sobe)",
-                            Title = "Stan A1 - 65m²"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Luksuzni stan s tri spavaće sobe, savršen za veće obitelji.",
-                            IsAvailable = true,
-                            Price = 220000m,
-                            Rooms = "3+1 (3 spavaće sobe)",
-                            Title = "Stan B2 - 78m²"
-                        });
                 });
 
             modelBuilder.Entity("ApartmentsProject.Models.ApartmentImage", b =>
