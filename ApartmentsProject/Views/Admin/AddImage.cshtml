@@ -1,14 +1,13 @@
-﻿<!-- Views/Admin/AddImage.cshtml -->
-@{
-    ViewData["Title"] = "Add Image";
+﻿@{
+    ViewData["Title"] = "Dodaj sliku";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Add Image to @ViewBag.ApartmentTitle</h2>
+        <h2>Dodaj sliku za @ViewBag.ApartmentTitle</h2>
         <a asp-action="Details" asp-route-id="@ViewBag.ApartmentId"
-           class="btn btn-secondary">Back</a>
+           class="btn btn-secondary">Nazad</a>
     </div>
 
     <div class="row justify-content-center">
@@ -22,7 +21,7 @@
 
                         <div class="mb-3">
                             <label for="imageFile" class="form-label">
-                                Select Image
+                                Odaberite sliku
                             </label>
                             <input type="file" class="form-control"
                                    id="imageFile" name="imageFile"
@@ -31,42 +30,42 @@
 
                         <div class="mb-3">
                             <label for="imageType" class="form-label">
-                                Image Type
+                                Tip slike
                             </label>
                             <select class="form-select" id="imageType"
                                     name="imageType" required>
-                                <option value="">Select type...</option>
-                                <option value="hero">Hero Image</option>
-                                <option value="gallery">Gallery</option>
+                                <option value="">Odaberite tip...</option>
+                                <option value="hero">Glavna slika</option>
+                                <option value="gallery">Galerija</option>
                             </select>
                         </div>
 
                         <div class="mb-3">
                             <label for="caption" class="form-label">
-                                Caption (Optional)
+                                Opis (neobavezno)
                             </label>
                             <input type="text" class="form-control"
                                    id="caption" name="caption"
-                                   placeholder="Brief description" />
+                                   placeholder="Kratki opis" />
                         </div>
 
                         <div class="mb-3">
                             <label for="displayOrder" class="form-label">
-                                Display Order
+                                Redoslijed prikaza
                             </label>
                             <input type="number" class="form-control"
                                    id="displayOrder" name="displayOrder"
                                    value="0" min="0" />
-                            <div class="form-text">Lower numbers appear first</div>
+                            <div class="form-text">Manji brojevi se prikazuju prvi</div>
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="submit" class="btn btn-primary">
-                                Upload Image
+                                Učitaj sliku
                             </button>
                             <a asp-action="Details"
                                asp-route-id="@ViewBag.ApartmentId"
-                               class="btn btn-secondary">Cancel</a>
+                               class="btn btn-secondary">Odustani</a>
                         </div>
                     </form>
 

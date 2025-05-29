@@ -1,16 +1,16 @@
 ﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
 
 @{
-    ViewData["Title"] = "Manage Users";
+    ViewData["Title"] = "Upravljanje korisnicima";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Manage Users</h2>
+        <h2>Upravljanje korisnicima</h2>
         <div>
-            <a asp-action="CreateUser" class="btn btn-primary">Create New User</a>
-            <a asp-action="Index" class="btn btn-secondary">Back to Apartments</a>
+            <a asp-action="CreateUser" class="btn btn-primary">Stvori novog korisnika</a>
+            <a asp-action="Index" class="btn btn-secondary">Povratak na stanove</a>
         </div>
     </div>
 
@@ -21,9 +21,9 @@
                     <thead>
                         <tr>
                             <th>Email</th>
-                            <th>Username</th>
-                            <th>Email Confirmed</th>
-                            <th>Actions</th>
+                            <th>Korisničko ime</th>
+                            <th>Email potvrđen</th>
+                            <th>Akcije</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,15 +34,15 @@
                                 <td>@user.UserName</td>
                                 <td>
                                     <span class="badge @(user.EmailConfirmed ? "bg-success" : "bg-warning")">
-                                        @(user.EmailConfirmed ? "Yes" : "No")
+                                        @(user.EmailConfirmed ? "Da" : "Ne")
                                     </span>
                                 </td>
                                 <td>
                                     <form asp-action="DeleteUser" method="post" class="d-inline">
                                         <input type="hidden" name="id" value="@user.Id" />
                                         <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('Delete this user?')">
-                                            Delete
+                                                onclick="return confirm('Obrisati ovog korisnika?')">
+                                            Obriši
                                         </button>
                                     </form>
                                 </td>

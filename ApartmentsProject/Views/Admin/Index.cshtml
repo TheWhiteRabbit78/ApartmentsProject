@@ -1,38 +1,85 @@
 ﻿@model IEnumerable<ApartmentsProject.Models.Apartment>
 
 @{
-    ViewData["Title"] = "Manage Apartments";
+    ViewData["Title"] = "Upravljanje Stanovima";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container-fluid">
-    <div class="d-flex justify-content-between">
-        <h2 class="mb-4">Manage Apartments</h2>
-        <a asp-action="Create" class="btn btn-primary mb-4">Create New</a>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Upravljanje Stanovima</h2>
+        <a asp-action="Create" class="btn btn-primary">Dodaj Novi Stan</a>
     </div>
+
     <div class="row g-4">
         @foreach (var apartment in Model)
         {
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">@apartment.Title</h5>
-                        <p class="card-text">
-                            <small class="text-muted">@apartment.Rooms</small><br>
-                            <strong>€@apartment.Price.ToString("N0")</strong><br>
-                            <span class="badge @(apartment.IsAvailable ? "bg-success" : "bg-danger")">
-                                @(apartment.IsAvailable ? "Available" : "Sold")
-                            </span><br>
-                            <small class="text-muted">Images: @apartment.Images.Count</small>
-                        </p>
-                        <div class="btn-group w-100">
-                            <a asp-action="Details" asp-route-id="@apartment.Id" class="btn btn-outline-primary btn-sm">View</a>
-                            <a asp-action="Edit" asp-route-id="@apartment.Id" class="btn btn-outline-secondary btn-sm">Edit</a>
-                            <a asp-action="Delete" asp-route-id="@apartment.Id" class="btn btn-outline-danger btn-sm">Delete</a>
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="admin-apartment-card apartment-card" data-apartment-id="@apartment.Id">
+                    @if (!string.IsNullOrEmpty(apartment.HeroImageUrl))
+                    {
+                        <img src="@apartment.HeroImageUrl"
+                             alt="@apartment.Title"
+                             class="card-img-top">
+                    }
+                    else
+                    {
+                        <div class="placeholder-image">
+                            <i class="fas fa-home fa-2x"></i>
+                            <p class="mt-2 mb-0">Nema slike</p>
+                        </div>
+                    }
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-semibold mb-2">@apartment.Title</h5>
+                        <p class="text-muted small mb-1">@apartment.Rooms</p>
+                        <p class="price fw-bold mb-2">@apartment.FormattedPrice</p>
+
+                        <div class="mb-3">
+                            <span class="badge @(apartment.IsAvailable ? "bg-success" : "bg-danger") me-2">
+                                @(apartment.IsAvailable ? "Dostupan" : "Prodan")
+                            </span>
+                            <small class="text-muted">
+                                <i class="fas fa-images me-1"></i>@apartment.Images.Count slika
+                            </small>
+                        </div>
+
+                        <div class="mt-auto">
+                            <div class="d-grid gap-2">
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Edit" asp-route-id="@apartment.Id"
+                                       class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-edit me-1"></i>Uredi
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@apartment.Id"
+                                       class="btn btn-outline-danger btn-sm">
+                                        <i class="fas fa-trash me-1"></i>Obriši
+                                    </a>
+                                </div>
+                                @if (apartment.Images.Count == 0)
+                                {
+                                    <a asp-action="AddImage" asp-route-id="@apartment.Id"
+                                       class="btn btn-outline-info btn-sm">
+                                        <i class="fas fa-plus me-1"></i>Dodaj sliku
+                                    </a>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         }
     </div>
+
+    @if (!Model.Any())
+    {
+        <div class="admin-empty-state">
+            <i class="fas fa-home fa-3x"></i>
+            <h3 class="text-muted">Nema stanova</h3>
+            <p class="text-muted">Počnite stvaranjem prvog stana.</p>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Stvori prvi stan
+            </a>
+        </div>
+    }
 </div>

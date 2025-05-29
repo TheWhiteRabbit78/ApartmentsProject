@@ -1,46 +1,45 @@
 ﻿@model ApartmentsProject.Models.Apartment
 
 @{
-    ViewData["Title"] = "Delete Apartment";
+    ViewData["Title"] = "Obriši Stan";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
+<div class="container col-md-8 mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-danger">Delete Apartment</h2>
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <h2 class="text-danger">Obriši Stan</h2>
     </div>
 
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col">
             <div class="card border-danger">
                 <div class="card-header bg-danger text-white">
-                    <h5 class="mb-0">⚠️ Warning: This action cannot be undone!</h5>
+                    <h5 class="mb-0">⚠️ Upozorenje: Ova radnja se ne može poništiti!</h5>
                 </div>
                 <div class="card-body">
                     <p class="text-danger mb-3">
-                        <strong>You are about to permanently delete this apartment and all its images.</strong>
+                        <strong>Trebate trajno obrisati ovaj stan i sve njegove slike.</strong>
                     </p>
 
                     <div class="row">
                         <div class="col-md-6">
-                            <h6>Apartment Details:</h6>
-                            <p><strong>Title:</strong> @Model.Title</p>
-                            <p><strong>Rooms:</strong> @Model.Rooms</p>
-                            <p><strong>Price:</strong> €@Model.Price.ToString("N0")</p>
+                            <h6>Detalji stana:</h6>
+                            <p><strong>Naziv:</strong> @Model.Title</p>
+                            <p><strong>Sobe:</strong> @Model.Rooms</p>
+                            <p><strong>Cijena:</strong> €@Model.Price.ToString("N0")</p>
                             <p>
                                 <strong>Status:</strong>
                                 <span class="badge @(Model.IsAvailable ? "bg-success" : "bg-danger")">
-                                    @(Model.IsAvailable ? "Available" : "Sold")
+                                    @(Model.IsAvailable ? "Dostupan" : "Prodan")
                                 </span>
                             </p>
                         </div>
                         <div class="col-md-6">
-                            <h6>What will be deleted:</h6>
+                            <h6>Što će biti obrisano:</h6>
                             <ul>
-                                <li>Apartment record</li>
-                                <li>@Model.Images.Count image(s) from database</li>
-                                <li>@Model.Images.Count image file(s) from server</li>
+                                <li>Zapis stana</li>
+                                <li>@Model.Images.Count slika iz baze podataka</li>
+                                <li>@Model.Images.Count datoteka slika s poslužitelja</li>
                             </ul>
                         </div>
                     </div>
@@ -50,11 +49,10 @@
                     <form asp-action="Delete" method="post" class="d-inline">
                         <input type="hidden" asp-for="Id" />
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you absolutely sure you want to delete this apartment? This cannot be undone!')">
-                                🗑️ Yes, Delete Permanently
+                            <a asp-action="Index" class="btn btn-secondary">Odustani - Povratak na popis</a>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Jeste li potpuno sigurni da želite obrisati ovaj stan? Ovo se ne može poništiti!')">
+                                🗑️ Da, obriši trajno
                             </button>
-                            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary">Cancel - View Details</a>
-                            <a asp-action="Index" class="btn btn-secondary">Cancel - Back to List</a>
                         </div>
                     </form>
                 </div>

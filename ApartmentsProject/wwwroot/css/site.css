@@ -429,6 +429,57 @@ footer {
     margin-top: 4rem;
 }
 
+/* Admin apartment cards */
+.admin-apartment-card {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+    .admin-apartment-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 62, 103, 0.15);
+    }
+
+    .admin-apartment-card .card-img-top {
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .admin-apartment-card:hover .card-img-top {
+        transform: scale(1.02);
+    }
+
+    .admin-apartment-card .placeholder-image {
+        background: linear-gradient(135deg, var(--light) 0%, #e9ecef 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--medium);
+        height: 200px;
+    }
+
+    .admin-apartment-card .price {
+        color: var(--secondary);
+        font-size: 1.1rem;
+    }
+
+    .admin-apartment-card .btn-group .btn {
+        flex: 1;
+    }
+
+.admin-empty-state {
+    padding: 3rem 0;
+    text-align: center;
+}
+
+    .admin-empty-state i {
+        color: var(--medium);
+        margin-bottom: 1rem;
+    }
+
 /* Responsive */
 @media (max-width: 768px) {
     .hero-content h1 {

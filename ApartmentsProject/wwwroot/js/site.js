@@ -212,4 +212,19 @@ $(document).ready(() => {
             }
         });
     });
+
+    $('.admin-apartment-card').on('click', function (e) {
+        // Don't trigger if clicking on buttons
+        if ($(e.target).closest('.btn, .btn-group').length === 0) {
+            const apartmentId = $(this).data('apartment-id');
+            if (apartmentId) {
+                window.location.href = `/Admin/Details/${apartmentId}`;
+            }
+        }
+    });
+
+    // Prevent button clicks from triggering card click
+    $('.admin-apartment-card .btn').on('click', function (e) {
+        e.stopPropagation();
+    });
 });
