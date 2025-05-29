@@ -19,6 +19,7 @@ namespace ApartmentsProject.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rooms = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Floor = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false),

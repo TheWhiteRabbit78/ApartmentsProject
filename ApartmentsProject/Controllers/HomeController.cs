@@ -19,7 +19,7 @@ public class HomeController(
         var apartments = await _context.Apartments
             .Include(a => a.Images)
             .Where(a => a.IsAvailable)
-            .OrderBy(a => a.Title)
+            .OrderBy(a => a.Id)
             .ToListAsync();
 
         return View(apartments);
@@ -62,7 +62,7 @@ public class HomeController(
             return Json(new
             {
                 success = true,
-                message = "Vaš upit je uspješno poslan. Kontaktirat æemo vas uskoro!"
+                message = "Vaš upit je uspješno poslan. Kontaktirat ?emo vas uskoro!"
             });
         }
         catch (Exception ex)

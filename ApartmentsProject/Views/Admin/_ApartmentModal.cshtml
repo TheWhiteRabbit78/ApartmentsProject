@@ -1,7 +1,7 @@
 ﻿@model ApartmentsProject.Models.Apartment
 
 <div class="modal-header">
-    <h5 class="modal-title">@(ViewBag.IsEdit == true ? "Uredi Stan" : "Dodaj Novi Stan")</h5>
+    <h5 class="modal-title">@(ViewBag.IsEdit == true ? "Uredi stan" : "Dodaj novi stan")</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 </div>
 
@@ -22,6 +22,12 @@
         </div>
 
         <div class="mb-3">
+            <label asp-for="Floor" class="form-label">Kat</label>
+            <input asp-for="Floor" class="form-control" placeholder="npr. 2. (drugi)" />
+            <span asp-validation-for="Floor" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
             <label asp-for="Description" class="form-label">Opis</label>
             <textarea asp-for="Description" class="form-control" rows="4" placeholder="Opišite stan..."></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
@@ -29,7 +35,7 @@
 
         <div class="mb-3">
             <label asp-for="Price" class="form-label">Cijena (€)</label>
-            <input asp-for="Price" class="form-control" type="number" step="1000" />
+            <input asp-for="Price" class="form-control" type="number" />
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
 
@@ -42,13 +48,12 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
         <button type="submit" class="btn btn-primary">
-            @(ViewBag.IsEdit == true ? "Spremi promjene" : "Stvori stan")
+            @(ViewBag.IsEdit == true ? "Spremi promjene" : "Dodaj stan")
         </button>
     </div>
 </form>
 
-<script>
-    // Enable validation for dynamic content
+<script>    
     $(function () {
         $.validator.unobtrusive.parse('.modal-form');
     });
