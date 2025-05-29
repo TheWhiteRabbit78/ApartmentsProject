@@ -1,6 +1,8 @@
 using ApartmentsProject.Data;
+using ApartmentsProject.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace ApartmentsProject.Controllers
 {
@@ -8,17 +10,19 @@ namespace ApartmentsProject.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IEmailService _emailService;
+        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ApplicationDbContext context, IEmailService emailService)
+        public HomeController(ApplicationDbContext context, IEmailService emailService, ILogger<HomeController> logger)
         {
             _context = context;
             _emailService = emailService;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
             var apartments = await _context.Apartments
-                .Include(a => a.Images.OrderBy(img => img.DisplayOrder))
+                .Include(a => a.Images)
                 .Where(a => a.IsAvailable)
                 .OrderBy(a => a.Id)
                 .ToListAsync();
@@ -26,37 +30,54 @@ namespace ApartmentsProject.Controllers
             return View(apartments);
         }
 
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
         [HttpPost]
-        public async Task<IActionResult> SubmitContact(string fullName, string email,
-            string phone, string message, int? apartmentId)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitContact(string fullName, string email, string phone, string message, int? apartmentId)
         {
             try
             {
-                var apartmentInfo = "";
-                if (apartmentId.HasValue)
+                if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(message))
                 {
-                    var apartment = await _context.Apartments.FindAsync(apartmentId);
-                    apartmentInfo = $"Apartment: {apartment?.Title}\n\n";
+                    return Json(new { success = false, message = "Molimo unesite sva obavezna polja." });
                 }
 
+                // Get apartment info if provided
+                string apartmentInfo = "";
+                if (apartmentId.HasValue)
+                {
+                    var apartment = await _context.Apartments.FindAsync(apartmentId.Value);
+                    if (apartment != null)
+                    {
+                        apartmentInfo = $"Stan: {apartment.Title} - {apartment.Rooms} - €{apartment.Price:N0}";
+                    }
+                }
+
+                // Prepare email content
                 var emailBody = $@"
-                    <h3>New Contact Form Submission</h3>
-                    <p><strong>Name:</strong> {fullName}</p>
+                    <h2>Nova poruka s web stranice</h2>
+                    <p><strong>Ime:</strong> {fullName}</p>
                     <p><strong>Email:</strong> {email}</p>
-                    <p><strong>Phone:</strong> {phone}</p>
-                    {(apartmentId.HasValue ? $"<p><strong>Interested in:</strong> {apartmentInfo}</p>" : "")}
-                    <p><strong>Message:</strong><br/>{message}</p>
+                    <p><strong>Telefon:</strong> {phone ?? "Nije naveden"}</p>
+                    {(!string.IsNullOrEmpty(apartmentInfo) ? $"<p><strong>Interes za:</strong> {apartmentInfo}</p>" : "")}
+                    <p><strong>Poruka:</strong></p>
+                    <p>{message.Replace("\n", "<br>")}</p>
                 ";
 
-                await _emailService.SendEmailAsync("info@yoursite.com",
-                    "New Contact Form Submission", emailBody);
+                // Send email
+                await _emailService.SendEmailAsync("info@residencezg.hr", "Nova poruka s web stranice", emailBody);
 
-                return Json(new { success = true, message = "Poruka je uspješno poslana!" });
+                return Json(new { success = true, message = "Vaša poruka je uspješno poslana. Kontaktirat æemo Vas uskoro!" });
             }
-            catch
+            catch (Exception ex)
             {
-                return Json(new { success = false, message = "Greška pri slanju poruke." });
+                _logger.LogError(ex, "Error sending contact form");
+                return Json(new { success = false, message = "Došlo je do greške prilikom slanja poruke. Molimo pokušajte ponovo." });
             }
-        }
+        }       
     }
 }
