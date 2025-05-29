@@ -130,12 +130,12 @@ public class AdminController(
         {
             if (imageFile?.Length > 0)
             {
-                var allowedExts = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var allowedExts = new[] { ".jpg", ".jpeg", ".png" };
                 var fileExt = Path.GetExtension(imageFile.FileName).ToLower();
 
                 if (!allowedExts.Contains(fileExt))
                 {
-                    ModelState.AddModelError("", "Dozvoljena su samo .jpg, .jpeg, .png, .gif proširenja.");
+                    ModelState.AddModelError("", "Dozvoljena su samo .jpg, .jpeg, .png, proširenja.");
                 }
                 else
                 {

@@ -361,4 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/ApartmentsProject/wwwroot/uploads/1145a8d8-b4e0-46f0-86da-c1a839957e77.png
+/ApartmentsProject/wwwroot/uploads/*
