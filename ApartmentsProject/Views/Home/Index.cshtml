@@ -1,5 +1,4 @@
-﻿<!-- Views/Home/Index.cshtml -->
-@model IEnumerable<ApartmentsProject.Models.Apartment>
+﻿@model IEnumerable<ApartmentsProject.Models.Apartment>
 @{
     Layout = null;
     ViewData["Title"] = "Home Page";
@@ -115,12 +114,10 @@
                     @foreach (var apartment in Model.Where(a => a.IsAvailable))
                     {
                         <div class="col-md-6 col-lg-3">
-                            <div class="apartment-card" data-bs-toggle="modal"
-                                 data-bs-target="#apartmentModal@(apartment.Id)">
-                                @if (!string.IsNullOrEmpty(apartment.HeroImageUrl))
+                            <div class="apartment-card" data-bs-toggle="modal" data-bs-target="#apartmentModal@(apartment.Id)">
+                                @if (!string.IsNullOrEmpty(apartment.Images.Select(ai => ai.FileName).FirstOrDefault()))
                                 {
-                                    <img src="@apartment.HeroImageUrl"
-                                         alt="@apartment.Title" class="card-img-top">
+                                    <img src="@apartment.Images.Select(ai => ai.FileName).FirstOrDefault()" alt="@apartment.Title" class="card-img-top">
                                 }
                                 else
                                 {
@@ -132,17 +129,16 @@
                                 <div class="card-body p-3">
                                     <div class="d-flex justify-content-between">
                                         <h3 class="fs-5 fw-semibold mb-1">@apartment.Title</h3>
-                                        <p class="fw-semibold mb-1">@apartment.SurfaceArea</p>
+                                        <p class="fw-semibold mb-1">@apartment.SurfaceArea m²</p>
                                     </div>
                                     <p class="small text-muted mb-1">@apartment.Rooms</p>
-                                    <p class="price mb-0">@apartment.FormattedPrice</p>
+                                    <p class="price mb-0">@apartment.Price.ToString("N0") €</p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Modal for apartment -->
-                        <div class="modal fade" id="apartmentModal@(apartment.Id)"
-                             tabindex="-1" aria-hidden="true">
+                        <div class="modal fade" id="apartmentModal@(apartment.Id)" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -154,17 +150,16 @@
                                                 @apartment.Rooms
                                             </p>
                                         </div>
-                                        <button type="button" class="btn-close"
-                                                data-bs-dismiss="modal"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body">
-                                        @if (apartment.HasImages)
+                                        @if (apartment.Images.Any())
                                         {
                                             <!-- Carousel -->
                                             <div id="gallery@(apartment.Id)"
                                                  class="carousel slide mb-4">
                                                 <div class="carousel-indicators">
-                                                    @for (int i = 0; i < apartment.SortedImages.Count; i++)
+                                                    @for (int i = 0; i < apartment.Images.Count; i++)
                                                     {
                                                         <button type="button"
                                                                 data-bs-target="#gallery@(apartment.Id)"
@@ -175,11 +170,11 @@
                                                 </div>
 
                                                 <div class="carousel-inner rounded">
-                                                    @for (int i = 0; i < apartment.SortedImages.Count; i++)
+                                                    @for (int i = 0; i < apartment.Images.Count; i++)
                                                     {
-                                                        var image = apartment.SortedImages[i];
+                                                        var image = apartment.Images[i];
                                                         <div class="carousel-item @(i == 0 ? "active" : "")">
-                                                            <img src="/uploads/@image.FileName"
+                                                            <img src="/assets/images/@image.FileName"
                                                                  class="d-block w-100 lightbox-trigger"
                                                                  alt="@image.Caption"
                                                                  data-apartment-id="@apartment.Id"
@@ -229,7 +224,7 @@
                                             <div class="col-md-3 col-6 mb-3">
                                                 <div class="modal-detail">
                                                     <p class="small text-muted mb-1">Cijena</p>
-                                                    <p class="fw-semibold mb-0">@apartment.FormattedPrice</p>
+                                                    <p class="fw-semibold mb-0">@apartment.Price.ToString("N0") €</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3 col-6 mb-3">
@@ -267,12 +262,12 @@
                 }
                 else
                 {
-                    <div class="col-12">
-                        <i class="fas fa-home fa-3x mb-3 text-muted"></i>
+                    <div class="col-12">                        
                         <h3 class="fs-4 fw-semibold mb-2">Trenutno nema dostupnih stanova</h3>
                         <p class="text-muted">Molimo provjerite kasnije ili nas kontaktirajte za više informacija.</p>
                     </div>
                 }
+            
             </div>
         </div>
     </section>
@@ -290,15 +285,10 @@
                         <form id="contactForm">
                             @Html.AntiForgeryToken()
                             <input type="hidden" id="apartmentId" name="apartmentId">
-                            <input class="form-control mb-3" id="fullName"
-                                   name="fullName" placeholder="Ime i prezime *" required>
-                            <input type="email" class="form-control mb-3" id="email"
-                                   name="email" placeholder="Email adresa *" required>
-                            <input type="tel" class="form-control mb-3" id="phone"
-                                   name="phone" placeholder="Telefon">
-                            <textarea class="form-control mb-3" id="message"
-                                      name="message" placeholder="Vaša poruka... *"
-                                      rows="4" required></textarea>
+                            <input class="form-control mb-3" id="fullName" name="fullName" placeholder="Ime i prezime *" required>
+                            <input type="email" class="form-control mb-3" id="email" name="email" placeholder="Email adresa *" required>
+                            <input type="tel" class="form-control mb-3" id="phone" name="phone" placeholder="Telefon">
+                            <textarea class="form-control mb-3" id="message" name="message" placeholder="Vaša poruka... *" rows="4" required></textarea>
                             <button type="submit" class="btn btn-dark w-100 py-2"
                                     id="submitBtn">
                                 <span class="submit-text">Pošalji upit</span>
@@ -312,7 +302,6 @@
                     </div>
                 </div>
 
-                <!-- Right Column: Map + Contact Cards -->
                 <div class="col-lg-7 order-1 order-lg-2">
                     <!-- Google Maps -->
                     <div class="card mb-4">

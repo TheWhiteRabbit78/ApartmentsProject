@@ -39,7 +39,7 @@ public class HomeController(ApplicationDbContext context, IEmailService emailSer
                 var apartment = await _context.Apartments.FindAsync(apartmentId.Value);
                 if (apartment != null)
                 {
-                    apartmentInfo = $"<br><strong>Stan:</strong> {apartment.Title} - {apartment.FormattedPrice}";
+                    apartmentInfo = $"<br><strong>Stan:</strong> {apartment.Title} - {apartment.Price:N0}€";
                 }
             }
 

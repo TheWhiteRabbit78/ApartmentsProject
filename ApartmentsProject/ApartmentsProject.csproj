@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-ApartmentsProject-a390b6b9-e4cb-4897-ab2d-71fed26864a2</UserSecretsId>
   </PropertyGroup>
@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\assets\images\" />
-    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
 </Project>

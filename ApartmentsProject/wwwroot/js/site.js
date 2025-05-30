@@ -1,7 +1,4 @@
-﻿// ==============================================
-// APARTMENT LIGHTBOX CLASS
-// ==============================================
-class ApartmentLightbox {
+﻿class ApartmentLightbox {
     constructor() {
         this.images = [];
         this.currentIndex = 0;
@@ -126,103 +123,23 @@ class ApartmentLightbox {
     }
 }
 
-// ==============================================
-// UTILITY FUNCTIONS
-// ==============================================
-function showNotification(message, type = 'info') {
-    const alert = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                    ${message}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                  </div>`;
-    $('#notification-area').html(alert);
-    setTimeout(() => $('.alert').fadeOut(), 5000);
-}
-
-// ==============================================
-// MODAL FUNCTIONS
-// ==============================================
-function openApartmentModal(id = 0) {
-    $.get('/Admin/GetApartmentModal', { id: id }, function (data) {
-        $('#modal-content').html(data);
-        $('#genericModal').modal('show');
-    });
-}
-
-function openApartmentDetailsModal(id) {
-    $.get('/Admin/GetApartmentDetailsModal', { id: id }, function (data) {
-        $('#modal-content').html(data);
-        $('#genericModal').modal('show');
-    });
-}
-
-function openDeleteApartmentModal(id) {
-    $.get('/Admin/GetDeleteApartmentModal', { id: id }, function (data) {
-        $('#modal-content').html(data);
-        $('#genericModal').modal('show');
-    });
-}
-
-function openAddImageModal(id) {
-    $.get('/Admin/GetAddImageModal', { id: id }, function (data) {
-        $('#modal-content').html(data);
-        $('#genericModal').modal('show');
-    });
-}
-
-function openCreateUserModal() {
-    $.get('/Admin/GetCreateUserModal', function (data) {
-        $('#modal-content').html(data);
-        $('#genericModal').modal('show');
-    });
-}
-
-function openDeleteUserModal(id) {
-    $.get('/Admin/GetDeleteUserModal', { id: id }, function (data) {
-        $('#modal-content').html(data);
-        $('#genericModal').modal('show');
-    });
-}
-
-function deleteImage(imageId, apartmentId) {
-    if (confirm('Obrisati ovu sliku?')) {
-        $.post('/Admin/DeleteImage', { id: imageId }, function (response) {
-            if (response.isValid) {
-                showNotification(response.message, 'success');
-                setTimeout(() => openApartmentDetailsModal(apartmentId), 1000);
-            } else {
-                showNotification(response.message, 'danger');
-            }
-        });
-    }
-}
-
-// ==============================================
-// DOCUMENT READY
-// ==============================================
 $(document).ready(function () {
-    // Initialize lightbox
     new ApartmentLightbox();
 
-    // Set current year in footer
     $('#currentYear').text(new Date().getFullYear());
 
-    // ==============================================
-    // SMOOTH SCROLLING
-    // ==============================================
     $('.scroll-link').on('click', function (e) {
         e.preventDefault();
         const target = $(this).attr('href');
         if ($(target).length) {
             $('html, body').animate({
                 scrollTop: $(target).offset().top - 70
-            }, 800);
+            }, 50);
         }
         $('.navbar-collapse').collapse('hide');
     });
 
-    // ==============================================
-    // CONTACT FORM HANDLING
-    // ==============================================
+    //Adds text to form for some UX bs
     $('.contact-button').on('click', function () {
         const apartmentId = $(this).data('apartment-id');
         const apartmentTitle = $(this).data('apartment-title');
@@ -242,7 +159,7 @@ $(document).ready(function () {
 
             $('html, body').animate({
                 scrollTop: $('#contact').offset().top - 70
-            }, 800);
+            }, 50);
             $('#fullName').focus();
         }, 300);
     });
@@ -296,80 +213,4 @@ $(document).ready(function () {
         });
     });
 
-    // ==============================================
-    // ADMIN CARD INTERACTIONS
-    // ==============================================
-    $('.admin-apartment-card').on('click', function (e) {
-        // Don't trigger if clicking on buttons
-        if ($(e.target).closest('.btn, .btn-group').length === 0) {
-            const apartmentId = $(this).data('apartment-id');
-            if (apartmentId) {
-                openApartmentDetailsModal(apartmentId);
-            }
-        }
-    });
-
-    $('.admin-apartment-card .btn').on('click', function (e) {
-        e.stopPropagation();
-    });
-
-    // ==============================================
-    // MODAL FORM HANDLING
-    // ==============================================
-    $(document).on('submit', '.modal-form', function (e) {
-        e.preventDefault();
-
-        const form = $(this);
-        const formData = new FormData(this);
-        const submitBtn = form.find('button[type="submit"]');
-        const originalText = submitBtn.html();
-
-        // Show loading state
-        submitBtn.prop('disabled', true)
-            .html('<span class="spinner-border spinner-border-sm me-2"></span>Šalje...');
-
-        $.ajax({
-            type: form.attr('method'),
-            url: form.attr('action'),
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.isValid) {
-                    $('#genericModal').modal('hide');
-                    showNotification(response.message, 'success');
-                    setTimeout(() => location.reload(), 1000);
-                } else {
-                    $('#modal-content').html(response.html);
-                }
-            },
-            error: function () {
-                showNotification('Došlo je do greške. Molimo pokušajte ponovo.', 'danger');
-            },
-            complete: function () {
-                submitBtn.prop('disabled', false).html(originalText);
-            }
-        });
-    });
-
-    // ==============================================
-    // MODAL EVENT HANDLERS
-    // ==============================================
-    $(document).on('shown.bs.modal', '#genericModal', function () {
-        // Parse validation for any forms in the modal
-        $.validator.unobtrusive.parse('#genericModal');
-        // Focus on first input
-        $('#genericModal').find('input:first').focus();
-    });
-
-    $(document).on('hidden.bs.modal', '#genericModal', function () {
-        $('#modal-content').empty();
-    });
-
-    // ==============================================
-    // FORM VALIDATION ENHANCEMENT
-    // ==============================================
-    $(document).on('focus', '.form-control', function () {
-        $(this).closest('.form-group, .mb-3').removeClass('has-error');
-    });
 });
