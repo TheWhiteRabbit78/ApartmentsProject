@@ -156,15 +156,44 @@ public class AdminController(ApplicationDbContext context, IWebHostEnvironment e
                 }
                 else
                 {
+                    // Check if apartment exists
+                    var apartment = await _context.Apartments.FindAsync(apartmentId);
+                    if (apartment == null)
+                    {
+                        ModelState.AddModelError("", "Stan nije pronađen.");
+                        ViewBag.ApartmentId = apartmentId;
+                        string html = await this.RenderViewAsync("_AddImageModal", null!, true);
+                        return Json(new { isValid = false, html });
+                    }
+
                     string fileName = Guid.NewGuid() + fileExt;
                     string uploadsPath = Path.Combine(_environment.WebRootPath, "uploads");
                     Directory.CreateDirectory(uploadsPath);
 
                     string filePath = Path.Combine(uploadsPath, fileName);
-                    using (FileStream stream = new FileStream(filePath, FileMode.Create))
-                        await imageFile.CopyToAsync(stream);
 
-                    ApartmentImage apartmentImage = new ApartmentImage()
+                    // Check if we already have an image with the same original filename to prevent accidental duplicates
+                    var existingImage = await _context.ApartmentImages
+                        .Where(ai => ai.ApartmentId == apartmentId &&
+                                    ai.Caption == caption &&
+                                    ai.ImageType == imageType)
+                        .FirstOrDefaultAsync();
+
+                    if (existingImage != null)
+                    {
+                        ModelState.AddModelError("", "Slika s istim opisom i tipom već postoji za ovaj stan.");
+                        ViewBag.ApartmentId = apartmentId;
+                        string duplicateHtml = await this.RenderViewAsync("_AddImageModal", null!, true);
+                        return Json(new { isValid = false, html = duplicateHtml });
+                    }
+
+                    // Save the file
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                    }
+
+                    var apartmentImage = new ApartmentImage
                     {
                         ApartmentId = apartmentId,
                         FileName = fileName,
@@ -176,6 +205,7 @@ public class AdminController(ApplicationDbContext context, IWebHostEnvironment e
 
                     _context.ApartmentImages.Add(apartmentImage);
                     await _context.SaveChangesAsync();
+
                     return Json(new { isValid = true, message = "Slika je uspješno dodana!" });
                 }
             }
@@ -185,15 +215,18 @@ public class AdminController(ApplicationDbContext context, IWebHostEnvironment e
             }
 
             ViewBag.ApartmentId = apartmentId;
-            string html = await this.RenderViewAsync("_AddImageModal", null!, true);
-            return Json(new { isValid = false, html });
+            string errorHtml = await this.RenderViewAsync("_AddImageModal", null!, true);
+            return Json(new { isValid = false, html = errorHtml });
         }
         catch (Exception ex)
         {
+            // Log the exception
+            Console.WriteLine($"Error in AddImage: {ex.Message}");
+
             ModelState.AddModelError("", "Greška pri dodavanju slike: " + ex.Message);
             ViewBag.ApartmentId = apartmentId;
-            string html = await this.RenderViewAsync("_AddImageModal", null!, true);
-            return Json(new { isValid = false, html });
+            string errorHtml = await this.RenderViewAsync("_AddImageModal", null!, true);
+            return Json(new { isValid = false, html = errorHtml });
         }
     }
 

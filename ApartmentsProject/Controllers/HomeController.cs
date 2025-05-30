@@ -1,16 +1,13 @@
 using ApartmentsProject.Data;
+using ApartmentsProject.Models;
 using ApartmentsProject.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApartmentsProject.Controllers;
 
-public class HomeController(
-    ILogger<HomeController> logger,
-    ApplicationDbContext context,
-    IEmailService emailService) : Controller
+public class HomeController(ApplicationDbContext context, IEmailService emailService) : Controller
 {
-    private readonly ILogger<HomeController> _logger = logger;
     private readonly ApplicationDbContext _context = context;
     private readonly IEmailService _emailService = emailService;
 
@@ -27,52 +24,42 @@ public class HomeController(
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> SubmitContact(string fullName, string email,
-        string phone, string message, int? apartmentId)
+    public async Task<IActionResult> SubmitContact(string fullName, string email, string phone, string message, int? apartmentId)
     {
         try
         {
-            if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(email) ||
-                string.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(message))
             {
                 return Json(new { success = false, message = "Molimo unesite sva obavezna polja." });
             }
 
-            var apartment = apartmentId.HasValue ?
-                await _context.Apartments.FindAsync(apartmentId.Value) : null;
+            string apartmentInfo = "";
+            if (apartmentId.HasValue)
+            {
+                var apartment = await _context.Apartments.FindAsync(apartmentId.Value);
+                if (apartment != null)
+                {
+                    apartmentInfo = $"<br><strong>Stan:</strong> {apartment.Title} - {apartment.FormattedPrice}";
+                }
+            }
 
-            var subject = apartment != null ?
-                $"Upit za stan: {apartment.Title}" :
-                "Novi kontakt upit - FABRIKON projekt";
-
-            var htmlBody = $@"
-                <h3>Novi kontakt upit</h3>
+            string emailBody = $@"
+                <h3>Nova poruka s web stranice</h3>
                 <p><strong>Ime:</strong> {fullName}</p>
                 <p><strong>Email:</strong> {email}</p>
-                <p><strong>Telefon:</strong> {phone ?? "Nije uneseno"}</p>
-                {(apartment != null ? $"<p><strong>Zanima stan:</strong> {apartment.Title}</p>" : "")}
+                <p><strong>Telefon:</strong> {phone ?? "Nije navedeno"}</p>
+                {apartmentInfo}
                 <p><strong>Poruka:</strong></p>
                 <p>{message.Replace("\n", "<br>")}</p>
-                <hr>
-                <p><small>Poslano preko web forme - FABRIKON projekt</small></p>
             ";
 
-            await _emailService.SendEmailAsync("info@fabrikon.hr", subject, htmlBody);
+            await _emailService.SendEmailAsync("info@fabrikon.hr", $"Nova poruka od {fullName}", emailBody);
 
-            return Json(new
-            {
-                success = true,
-                message = "Vaš upit je uspješno poslan. Kontaktirat ?emo vas uskoro!"
-            });
+            return Json(new { success = true, message = "Vaša poruka je uspješno poslana!" });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error sending contact email");
-            return Json(new
-            {
-                success = false,
-                message = "Došlo je do greške prilikom slanja upita. Molimo pokušajte ponovo."
-            });
+            return Json(new { success = false, message = "Došlo je do greške pri slanju poruke." });
         }
     }
 }

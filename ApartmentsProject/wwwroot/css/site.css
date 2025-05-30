@@ -1,4 +1,6 @@
-/* wwwroot/css/site.css */
+/* ==============================================
+   CSS VARIABLES & RESET
+   ============================================== */
 :root {
     --primary: #003E67;
     --secondary: #DA7422;
@@ -9,15 +11,24 @@
     --white: #FFFFFF;
     --success: #28A745;
     --danger: #DC3545;
+    --border: #E9ECEF;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: var(--dark);
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
 }
 
-/* Navigation */
+/* ==============================================
+   NAVIGATION
+   ============================================== */
 .navbar {
     box-shadow: 0 2px 15px rgba(0, 62, 103, 0.1);
     background-color: var(--white) !important;
@@ -30,6 +41,9 @@ body {
     color: var(--primary) !important;
     text-transform: uppercase;
     letter-spacing: 1px;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
 
 .nav-link {
@@ -44,7 +58,9 @@ body {
         transform: translateY(-1px);
     }
 
-/* Hero Section */
+/* ==============================================
+   HERO SECTION
+   ============================================== */
 .hero-section {
     height: 100vh;
     background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
@@ -79,6 +95,9 @@ body {
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
 
+/* ==============================================
+   BUTTONS
+   ============================================== */
 .btn-hero {
     background-color: var(--secondary);
     border: none;
@@ -90,6 +109,8 @@ body {
     transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    text-decoration: none;
+    display: inline-block;
 }
 
     .btn-hero:hover {
@@ -99,109 +120,6 @@ body {
         color: var(--white);
     }
 
-/* Sections */
-.section-heading {
-    font-size: 2.75rem;
-    font-weight: 700;
-    margin-bottom: 3rem;
-    text-align: center;
-    color: var(--primary);
-    position: relative;
-}
-
-    .section-heading::after {
-        content: '';
-        position: absolute;
-        bottom: -10px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 4px;
-        background: linear-gradient(90deg, var(--secondary), var(--accent));
-        border-radius: 2px;
-    }
-
-/* Cards */
-.feature-card, .contact-card, .apartment-card {
-    background-color: var(--white);
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0, 62, 103, 0.08);
-    transition: all 0.3s ease;
-    border-left: 4px solid var(--secondary);
-}
-
-.apartment-card {
-    border-radius: 15px;
-    overflow: hidden;
-    cursor: pointer;
-    height: 100%;
-    border: 1px solid rgba(0, 62, 103, 0.08);
-    padding: 0;
-    border-left: none;
-}
-
-    .apartment-card:hover, .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0, 62, 103, 0.15);
-    }
-
-    .apartment-card:hover {
-        border-color: var(--secondary);
-    }
-
-    .apartment-card img {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-        transition: transform 0.4s ease;
-    }
-
-    .apartment-card:hover img {
-        transform: scale(1.05);
-    }
-
-    .apartment-card .card-body {
-        padding: 1.5rem;
-    }
-
-    .apartment-card h3 {
-        color: var(--primary);
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-
-    .apartment-card .price {
-        color: var(--secondary);
-        font-weight: 700;
-        font-size: 1.2rem;
-    }
-
-/* Contact */
-.contact-info-card {
-    background-color: var(--white);
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0, 62, 103, 0.08);
-    display: flex;
-    align-items: flex-start;
-    transition: all 0.3s ease;
-    border-left: 3px solid var(--accent);
-}
-
-    .contact-info-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0, 62, 103, 0.15);
-    }
-
-    .contact-info-card i {
-        font-size: 1.5rem;
-        color: var(--secondary);
-        margin-right: 1rem;
-        margin-top: 0.25rem;
-    }
-
-/* Buttons */
 .btn-primary {
     background-color: var(--accent);
     border-color: var(--accent);
@@ -234,9 +152,131 @@ body {
         box-shadow: 0 4px 12px rgba(218, 116, 34, 0.3);
     }
 
-/* Forms */
+/* ==============================================
+   SECTIONS & HEADINGS
+   ============================================== */
+.section-heading {
+    font-size: 2.75rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    text-align: center;
+    color: var(--primary);
+    position: relative;
+}
+
+    .section-heading::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--secondary), var(--accent));
+        border-radius: 2px;
+    }
+
+/* ==============================================
+   CARDS
+   ============================================== */
+.feature-card, .contact-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 62, 103, 0.08);
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--secondary);
+    height: 100%;
+}
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 62, 103, 0.15);
+    }
+
+.apartment-card {
+    background-color: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    height: 100%;
+    border: 1px solid var(--border);
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+    .apartment-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 62, 103, 0.15);
+        border-color: var(--secondary);
+    }
+
+    .apartment-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .apartment-card:hover img {
+        transform: scale(1.05);
+    }
+
+    .apartment-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .apartment-card h3 {
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .apartment-card .price {
+        color: var(--secondary);
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+.contact-info-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 62, 103, 0.08);
+    display: flex;
+    align-items: flex-start;
+    transition: all 0.3s ease;
+    border-left: 3px solid var(--accent);
+    height: 100%;
+}
+
+    .contact-info-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 62, 103, 0.15);
+    }
+
+    .contact-info-card i {
+        font-size: 1.5rem;
+        color: var(--secondary);
+        margin-right: 1rem;
+        margin-top: 0.25rem;
+    }
+
+.placeholder-image {
+    background: linear-gradient(135deg, var(--light) 0%, var(--border) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--medium);
+    height: 220px;
+}
+
+/* ==============================================
+   FORMS
+   ============================================== */
 .form-control {
-    border: 2px solid #E9ECEF;
+    border: 2px solid var(--border);
     border-radius: 8px;
     padding: 0.75rem 1rem;
     transition: all 0.3s ease;
@@ -247,7 +287,47 @@ body {
         box-shadow: 0 0 0 0.2rem rgba(27, 110, 194, 0.15);
     }
 
-/* Lightbox */
+/* ==============================================
+   MODALS
+   ============================================== */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 20px 40px rgba(0, 62, 103, 0.15);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+}
+
+.modal-title {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.modal-detail {
+    background-color: var(--light);
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 3px solid var(--accent);
+}
+
+.carousel-item img {
+    height: 400px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    background-color: rgba(0, 62, 103, 0.8);
+    border-radius: 50%;
+    padding: 1rem;
+}
+
+/* ==============================================
+   LIGHTBOX
+   ============================================== */
 .lightbox {
     position: fixed;
     top: 0;
@@ -359,77 +439,9 @@ body {
     min-width: 200px;
 }
 
-/* Utilities */
-.bg-light {
-    background-color: var(--light) !important;
-}
-
-.badge.bg-success {
-    background-color: var(--success) !important;
-}
-
-.badge.bg-danger {
-    background-color: var(--danger) !important;
-}
-
-.text-muted {
-    color: var(--medium) !important;
-}
-
-.placeholder-image {
-    background: linear-gradient(135deg, var(--light) 0%, #E9ECEF 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--medium);
-    height: 220px;
-}
-
-/* Modal */
-.modal-content {
-    border-radius: 15px;
-    border: none;
-    box-shadow: 0 20px 40px rgba(0, 62, 103, 0.15);
-}
-
-.modal-header {
-    border-bottom: 1px solid rgba(0, 62, 103, 0.1);
-    padding: 1.5rem 2rem;
-}
-
-.modal-title {
-    color: var(--primary);
-    font-weight: 600;
-}
-
-.modal-detail {
-    background-color: var(--light);
-    border-radius: 8px;
-    padding: 1rem;
-    border-left: 3px solid var(--accent);
-}
-
-.carousel-item img {
-    height: 400px;
-    object-fit: cover;
-    cursor: pointer;
-}
-
-.carousel-control-prev-icon, .carousel-control-next-icon {
-    background-color: rgba(0, 62, 103, 0.8);
-    border-radius: 50%;
-    padding: 1rem;
-}
-
-/* Footer */
-footer {
-    background: linear-gradient(135deg, var(--primary) 0%, #001A2E 100%);
-    color: var(--white);
-    padding: 2rem 0;
-    margin-top: 4rem;
-}
-
-/* Admin apartment cards */
+/* ==============================================
+   ADMIN STYLES
+   ============================================== */
 .admin-apartment-card {
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -452,22 +464,7 @@ footer {
     }
 
     .admin-apartment-card .placeholder-image {
-        background: linear-gradient(135deg, var(--light) 0%, #e9ecef 100%);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: var(--medium);
         height: 200px;
-    }
-
-    .admin-apartment-card .price {
-        color: var(--secondary);
-        font-size: 1.1rem;
-    }
-
-    .admin-apartment-card .btn-group .btn {
-        flex: 1;
     }
 
 .admin-empty-state {
@@ -480,22 +477,56 @@ footer {
         margin-bottom: 1rem;
     }
 
-
-/* Modal enhancements */
-.modal-dialog {
-    max-width: 600px;
+/* ==============================================
+   UTILITIES
+   ============================================== */
+.bg-light {
+    background-color: var(--light) !important;
 }
 
-.modal-dialog-large {
-    max-width: 900px;
+.badge.bg-success {
+    background-color: var(--success) !important;
 }
 
-.modal-form .btn[type="submit"] {
-    min-width: 120px;
+.badge.bg-danger {
+    background-color: var(--danger) !important;
 }
 
-.modal-header.bg-danger .btn-close-white {
-    filter: invert(1) grayscale(100%) brightness(200%);
+.text-muted {
+    color: var(--medium) !important;
+}
+
+.border-top {
+    border-top: 1px solid var(--border);
+}
+
+.border-bottom {
+    border-bottom: 1px solid var(--border);
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+/* Footer */
+footer {
+    background: linear-gradient(135deg, var(--primary) 0%, #001A2E 100%);
+    color: var(--white);
+    padding: 2rem 0;
+    margin-top: 4rem;
 }
 
 /* Notification area */
@@ -518,6 +549,23 @@ footer {
     height: 1rem;
 }
 
+/* Modal enhancements */
+.modal-dialog {
+    max-width: 600px;
+}
+
+.modal-dialog-large {
+    max-width: 900px;
+}
+
+.modal-form .btn[type="submit"] {
+    min-width: 120px;
+}
+
+.modal-header.bg-danger .btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
 /* Modal image gallery */
 .modal-body .img-fluid {
     transition: transform 0.2s ease;
@@ -527,7 +575,9 @@ footer {
         transform: scale(1.02);
     }
 
-/* Responsive */
+/* ==============================================
+   RESPONSIVE DESIGN
+   ============================================== */
 @media (max-width: 768px) {
     .hero-content h1 {
         font-size: 2.5rem;
@@ -582,3 +632,98 @@ footer {
         font-size: 1.4rem;
     }
 }
+
+/* ==============================================
+   IDENTITY PAGES STYLES
+   ============================================== */
+.identity-container {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.identity-card {
+    background: var(--white);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 62, 103, 0.1);
+    padding: 3rem;
+    max-width: 400px;
+    width: 100%;
+}
+
+.identity-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+    .identity-header h1 {
+        color: var(--primary);
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .identity-header p {
+        color: var(--medium);
+        font-size: 0.95rem;
+    }
+
+.identity-form .form-floating {
+    margin-bottom: 1rem;
+}
+
+.identity-form .form-control {
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 0.75rem;
+    font-size: 1rem;
+}
+
+    .identity-form .form-control:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 0.2rem rgba(27, 110, 194, 0.15);
+    }
+
+.identity-form label {
+    color: var(--medium);
+    font-size: 0.9rem;
+}
+
+.identity-submit {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.identity-links {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+    .identity-links a {
+        color: var(--accent);
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+        .identity-links a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+    .remember-me input[type="checkbox"] {
+        margin-right: 0.5rem;
+    }
