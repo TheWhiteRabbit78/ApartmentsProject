@@ -9,7 +9,7 @@ public class ApartmentImage
     public string FileName { get; set; } 
     [Required] 
     public string ImageType { get; set; }
-    public string Caption { get; set; } 
+    public string Caption { get; set; }
     public DateTime UploadedAt { get; set; }
     public int ApartmentId { get; set; }
     public Apartment Apartment { get; set; }

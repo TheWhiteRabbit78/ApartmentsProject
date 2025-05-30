@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApartmentsProject.Models;
 
@@ -25,10 +27,20 @@ public class Apartment
     [StringLength(500, ErrorMessage = "Opis ne smije biti duži od 500 znakova")]
     public string Description { get; set; }
 
-    [Required(ErrorMessage = "Cijena je obavezna")]
+    [Required(ErrorMessage = "Cijena je obavezna")]    
     public int Price { get; set; }
 
     public bool IsAvailable { get; set; }
 
     public List<ApartmentImage> Images { get; set; }
+
+    public string ImageUrl { get {
+            var image = Images.OrderBy(i => i.UploadedAt).FirstOrDefault().FileName;
+            if (image != null)
+            {
+                return $"/assets/images/{Images.First().FileName}";
+            }
+            return null;
+
+        } }
 }
