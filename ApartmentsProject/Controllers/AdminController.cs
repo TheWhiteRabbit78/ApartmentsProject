@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApartmentsProject.Controllers;
@@ -18,10 +19,9 @@ public class AdminController(ApplicationDbContext context, UserManager<IdentityU
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        List<Apartment> apartments = await _context.Apartments
-            .Include(a => a.Images.OrderBy(i => i.UploadedAt))
-            .OrderBy(a => a.Id)
-            .ToListAsync();
+        List<Apartment> apartments = await _context.Apartments.Include(a => a.Images.OrderBy(i => i.UploadedAt))
+                                                              .OrderBy(a => a.Id)
+                                                              .ToListAsync();
         return View(apartments);
     }
 
@@ -37,13 +37,7 @@ public class AdminController(ApplicationDbContext context, UserManager<IdentityU
         else
         {
             // Edit existing apartment
-            var apartment = _context.Apartments
-                .Include(a => a.Images.OrderBy(i => i.UploadedAt))
-                .FirstOrDefault(a => a.Id == id);
-
-            if (apartment == null)
-                return NotFound();
-
+            var apartment = _context.Apartments.Include(a => a.Images.OrderBy(i => i.UploadedAt)).FirstOrDefault(a => a.Id == id);
             return PartialView("_EditApartment", apartment);
         }
     }
@@ -51,10 +45,7 @@ public class AdminController(ApplicationDbContext context, UserManager<IdentityU
     [HttpGet]
     public IActionResult GetDeleteApartmentModal(int id)
     {
-        var apartment = _context.Apartments.FirstOrDefault(a => a.Id == id);
-        if (apartment == null)
-            return NotFound();
-
+        var apartment = _context.Apartments.FirstOrDefault(a => a.Id == id);                
         return PartialView("_DeleteApartment", apartment);
     }
 
@@ -73,7 +64,7 @@ public class AdminController(ApplicationDbContext context, UserManager<IdentityU
             await _context.SaveChangesAsync();
 
             // Handle image uploads
-            if (imageFiles?.Any() == true)
+            if (imageFiles.Any())
             {
                 await SaveImages(apartment.Id, imageFiles);
             }
@@ -93,10 +84,9 @@ public class AdminController(ApplicationDbContext context, UserManager<IdentityU
         if (!ModelState.IsValid)
         {
             // Reload images for validation display
-            apartment.Images = _context.ApartmentImages
-                .Where(i => i.ApartmentId == apartment.Id)
-                .OrderBy(i => i.UploadedAt)
-                .ToList();
+            apartment.Images = _context.ApartmentImages.Where(i => i.ApartmentId == apartment.Id)
+                                                       .OrderBy(i => i.UploadedAt)
+                                                       .ToList();
             return Json(new { isValid = false, html = await this.RenderViewAsync("_EditApartment", apartment, true) });
         }
 
@@ -105,8 +95,7 @@ public class AdminController(ApplicationDbContext context, UserManager<IdentityU
             _context.Apartments.Update(apartment);
             await _context.SaveChangesAsync();
 
-            // Handle new image uploads
-            if (imageFiles?.Any() == true)
+            if (imageFiles.Any())
             {
                 await SaveImages(apartment.Id, imageFiles);
             }
@@ -116,10 +105,7 @@ public class AdminController(ApplicationDbContext context, UserManager<IdentityU
         catch (Exception ex)
         {
             ModelState.AddModelError("", "Došlo je do greške: " + ex.Message);
-            apartment.Images = _context.ApartmentImages
-                .Where(i => i.ApartmentId == apartment.Id)
-                .OrderBy(i => i.UploadedAt)
-                .ToList();
+            apartment.Images = _context.ApartmentImages.Where(i => i.ApartmentId == apartment.Id).OrderBy(i => i.UploadedAt).ToList();
             return Json(new { isValid = false, html = await this.RenderViewAsync("_EditApartment", apartment, true) });
         }
     }
@@ -129,14 +115,8 @@ public class AdminController(ApplicationDbContext context, UserManager<IdentityU
     {
         try
         {
-            var apartment = await _context.Apartments
-                .Include(a => a.Images)
-                .FirstOrDefaultAsync(a => a.Id == id);
-
-            if (apartment == null)
-                return Json(new { isValid = false, message = "Stan nije pronađen." });
-
-            // Delete physical files
+            Apartment apartment = await _context.Apartments.Include(a => a.Images).FirstOrDefaultAsync(a => a.Id == id);
+            
             foreach (var image in apartment.Images)
             {
                 var filePath = Path.Combine(_environment.WebRootPath, "assets", "images", image.FileName);
@@ -163,8 +143,6 @@ public class AdminController(ApplicationDbContext context, UserManager<IdentityU
         try
         {
             var image = _context.ApartmentImages.FirstOrDefault(i => i.Id == imageId);
-            if (image == null)
-                return Json(new { success = false, message = "Slika nije pronađena." });
 
             // Delete physical file
             var filePath = Path.Combine(_environment.WebRootPath, "assets", "images", image.FileName);
@@ -176,7 +154,7 @@ public class AdminController(ApplicationDbContext context, UserManager<IdentityU
             _context.ApartmentImages.Remove(image);
             await _context.SaveChangesAsync();
 
-            return Json(new { success = true, message = "Slika je obrisana!" });
+            return Json(new { isValid = true, message = "Slika je uspješno obrisana!" });
         }
         catch (Exception ex)
         {
@@ -193,18 +171,17 @@ public class AdminController(ApplicationDbContext context, UserManager<IdentityU
         {
             if (file.Length > 0)
             {
-                var fileName = $"{apartmentId}_{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-                var filePath = Path.Combine(uploadsPath, fileName);
 
+                string filePath = Path.Combine(uploadsPath, file.FileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
 
-                var apartmentImage = new ApartmentImage
+                ApartmentImage apartmentImage = new ApartmentImage
                 {
                     ApartmentId = apartmentId,
-                    FileName = fileName,
+                    FileName = file.FileName,
                     UploadedAt = DateTime.Now
                 };
 
@@ -216,25 +193,115 @@ public class AdminController(ApplicationDbContext context, UserManager<IdentityU
     }
 
     [HttpGet]
-    public async Task<IActionResult> Users()
+    public IActionResult Users()
     {
         var users = _userManager.Users.ToList();
         return View(users);
+    }
+
+    [HttpGet]
+    public IActionResult GetCreateUserModal()
+    {
+        var model = new CreateUserViewModel();
+        return PartialView("_CreateUser", model);
+    }
+
+    [HttpGet]
+    public IActionResult GetDeleteUserModal(string id)
+    {
+        var user = _userManager.FindByIdAsync(id).Result;
+        if (user == null)
+            return NotFound();
+
+        return PartialView("_DeleteUser", user);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateUser(CreateUserViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return Json(new { isValid = false, html = await this.RenderViewAsync("_CreateUser", model, true) });
+        }
+
+        try
+        {
+            var user = new IdentityUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                return Json(new { isValid = true, message = "Korisnik je uspješno kreiran!" });
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return Json(new { isValid = false, html = await this.RenderViewAsync("_CreateUser", model, true) });
+            }
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("", "Došlo je do greške: " + ex.Message);
+            return Json(new { isValid = false, html = await this.RenderViewAsync("_CreateUser", model, true) });
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return Json(new { isValid = false, message = "Korisnik nije pronađen." });
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
+                return Json(new { isValid = true, message = "Korisnik je uspješno obrisan!" });
+            }
+            else
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                return Json(new { isValid = false, message = "Greška pri brisanju: " + errors });
+            }
+        }
+        catch (Exception ex)
+        {
+            return Json(new { isValid = false, message = "Došlo je do greške: " + ex.Message });
+        }
     }
 }
 
 public static class ControllerExtensions
 {
-    public static async Task<string> RenderViewAsync<TModel>(this Controller controller, string viewName, TModel model, bool partial = false)
+    public static async Task<string> RenderViewAsync<TModel>(this Controller controller, string viewName, TModel? model, bool partial = false)
     {
-        if (string.IsNullOrEmpty(viewName))
+        if (string.IsNullOrEmpty(viewName)) 
+        {
             viewName = controller.ControllerContext.ActionDescriptor.ActionName;
+        }   
 
         controller.ViewData.Model = model;
 
         using var writer = new StringWriter();
-        var viewEngine = controller.HttpContext.RequestServices.GetService(typeof(Microsoft.AspNetCore.Mvc.ViewEngines.ICompositeViewEngine)) as Microsoft.AspNetCore.Mvc.ViewEngines.ICompositeViewEngine;
-        var viewContext = new ViewContext(controller.ControllerContext, viewEngine.FindView(controller.ControllerContext, viewName, !partial).View, controller.ViewData, controller.TempData, writer, new Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelperOptions());
+        var viewEngine = controller.HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+        var viewContext = new ViewContext(controller.ControllerContext, 
+                                          viewEngine.FindView(controller.ControllerContext, viewName, !partial).View, 
+                                          controller.ViewData, 
+                                          controller.TempData, 
+                                          writer, 
+                                          new Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelperOptions());
 
         await viewContext.View.RenderAsync(viewContext);
         return writer.GetStringBuilder().ToString();

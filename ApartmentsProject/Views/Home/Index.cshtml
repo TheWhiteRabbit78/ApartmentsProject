@@ -105,7 +105,7 @@
     </section>
 
     <!-- Apartments Section -->
-    <section id="apartments" class="py-5">
+    <section id="apartments" class="py-5 bg-light">
         <div class="container py-4">
             <h2 class="section-heading">Dostupni Stanovi</h2>
             <div class="row g-4">
@@ -113,7 +113,7 @@
                 {
                     @foreach (var apartment in Model.Where(a => a.IsAvailable))
                     {
-                        <div class="col-md-6 col-lg-3">
+                        <div class="col-md-6 col-lg-4">
                             <div class="apartment-card" data-bs-toggle="modal" data-bs-target="#apartmentModal@(apartment.Id)">
                                 @if (!string.IsNullOrEmpty(apartment.ImageUrl))
                                 {

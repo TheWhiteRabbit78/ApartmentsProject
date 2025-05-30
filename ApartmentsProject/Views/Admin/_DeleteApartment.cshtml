@@ -6,7 +6,7 @@
 </div>
 <form class="modal-form" asp-action="DeleteApartment" method="post">
     <div class="modal-body">
-        <input type="hidden" name="id" value="@Model.Id" />
+        <input hidden asp-for="Id" />
         <p>Jeste li sigurni da želite obrisati stan <strong>@Model.Title</strong>?</p>
         <p class="text-muted">Ova akcija je nepovratna i obrisat će se sve slike povezane sa stanom.</p>
     </div>

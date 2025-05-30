@@ -1,0 +1,17 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityUser
+
+<div class="modal-header bg-danger text-white">
+    <h5 class="modal-title">Obriši korisnika</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+<form class="modal-form" asp-action="DeleteUser" method="post">
+    <div class="modal-body">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <p>Jeste li sigurni da želite obrisati korisnika <strong>@Model.Email</strong>?</p>
+        <p class="text-muted">Ova akcija je nepovratna.</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+        <button type="submit" class="btn btn-danger">Obriši korisnika</button>
+    </div>
+</form>

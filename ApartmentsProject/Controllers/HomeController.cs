@@ -3,13 +3,15 @@ using ApartmentsProject.Models;
 using ApartmentsProject.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace ApartmentsProject.Controllers;
 
-public class HomeController(ApplicationDbContext context, IEmailService emailService) : Controller
+public class HomeController(ApplicationDbContext context, IEmailService emailService, IOptions<EmailSettings> emailSettings) : Controller
 {
     private readonly ApplicationDbContext _context = context;
-    private readonly IEmailService _emailService = emailService;
+    private readonly IEmailService _emailService = emailService;    
+    private readonly EmailSettings _emailSettings = emailSettings.Value;
 
     public async Task<IActionResult> Index()
     {
@@ -53,7 +55,10 @@ public class HomeController(ApplicationDbContext context, IEmailService emailSer
                 <p>{message.Replace("\n", "<br>")}</p>
             ";
 
-            await _emailService.SendEmailAsync("info@fabrikon.hr", $"Nova poruka od {fullName}", emailBody);
+            //await _emailService.SendEmailAsync("info@fabrikon.hr", $"Nova poruka od {fullName}", emailBody);
+
+            await _emailService.SendEmailAsync(_emailSettings.SenderEmail, $"Nova poruka od {fullName}", emailBody);
+
 
             return Json(new { success = true, message = "Vaša poruka je uspješno poslana!" });
         }

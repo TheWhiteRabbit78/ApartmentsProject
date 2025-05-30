@@ -49,9 +49,6 @@
                         <div class="mt-auto">
                             <div class="d-grid gap-2">
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-outline-info btn-sm" onclick="openApartmentDetailsModal(@apartment.Id)">
-                                        <i class="fas fa-eye me-1"></i>Detalji
-                                    </button>
                                     <button type="button" class="btn btn-outline-secondary btn-sm" onclick="openApartmentModal(@apartment.Id)">
                                         <i class="fas fa-edit me-1"></i>Uredi
                                     </button>
@@ -59,12 +56,6 @@
                                         <i class="fas fa-trash me-1"></i>Obriši
                                     </button>
                                 </div>
-                                @if (apartment.Images.Count == 0)
-                                {
-                                    <button type="button" class="btn btn-outline-info btn-sm" onclick="openAddImageModal(@apartment.Id)">
-                                        <i class="fas fa-plus me-1"></i>Dodaj sliku
-                                    </button>
-                                }
                             </div>
                         </div>
                     </div>
@@ -105,22 +96,8 @@
             });
         }
 
-        function openApartmentDetailsModal(id) {
-            $.get('@Url.Action("GetApartmentDetailsModal", "Admin")', { id: id }, function (data) {
-                $('#modal-content').html(data);
-                $('#genericModal').modal('show');
-            });
-        }
-
         function openDeleteApartmentModal(id) {
             $.get('@Url.Action("GetDeleteApartmentModal", "Admin")', { id: id }, function (data) {
-                $('#modal-content').html(data);
-                $('#genericModal').modal('show');
-            });
-        }
-
-        function openAddImageModal(id) {
-            $.get('@Url.Action("GetAddImageModal", "Admin")', { id: id }, function (data) {
                 $('#modal-content').html(data);
                 $('#genericModal').modal('show');
             });

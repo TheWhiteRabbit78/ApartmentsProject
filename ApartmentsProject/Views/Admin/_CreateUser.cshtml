@@ -1,0 +1,39 @@
+﻿@model ApartmentsProject.Models.CreateUserViewModel
+
+<div class="modal-header">
+    <h5 class="modal-title">Dodaj novog korisnika</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<form class="modal-form" asp-action="CreateUser" method="post">
+    <div class="modal-body">
+        <div class="form-floating mb-3">
+            <input asp-for="Email" class="form-control" placeholder="Email adresa">
+            <label asp-for="Email">Email adresa</label>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Password" type="password" class="form-control" placeholder="Lozinka">
+            <label asp-for="Password">Lozinka</label>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Potvrdi lozinku">
+            <label asp-for="ConfirmPassword">Potvrdi lozinku</label>
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <div class="alert alert-info">
+            <small>
+                <i class="fas fa-info-circle me-2"></i>
+                Lozinka mora imati najmanje 6 znakova i sadrživati barem jednu znamenku.
+            </small>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+        <button type="submit" class="btn btn-primary">Stvori korisnika</button>
+    </div>
+</form>
