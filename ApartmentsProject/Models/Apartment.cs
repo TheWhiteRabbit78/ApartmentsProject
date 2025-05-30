@@ -27,20 +27,31 @@ public class Apartment
     [StringLength(500, ErrorMessage = "Opis ne smije biti duži od 500 znakova")]
     public string Description { get; set; }
 
-    [Required(ErrorMessage = "Cijena je obavezna")]    
+    [Required(ErrorMessage = "Cijena je obavezna")]
     public int Price { get; set; }
 
     public bool IsAvailable { get; set; }
 
-    public List<ApartmentImage> Images { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-    public string ImageUrl { get {
-            var image = Images.OrderBy(i => i.UploadedAt).FirstOrDefault().FileName;
-            if (image != null)
+    public List<ApartmentImage> Images { get; set; } = new List<ApartmentImage>();
+
+    public string ImageUrl
+    {
+        get
+        {
+
+            if (Images.Any())
             {
-                return $"/assets/images/{Images.First().FileName}";
+                var image = Images.OrderBy(i => i.UploadedAt).FirstOrDefault().FileName;
+                if (image != null)
+                {
+                    return $"/assets/images/{Images.First().FileName}";
+                }
             }
+
             return null;
 
-        } }
+        }
+    }
 }

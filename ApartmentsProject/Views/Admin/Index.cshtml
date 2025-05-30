@@ -20,9 +20,9 @@
         {
             <div class="col-md-6 col-lg-4 col-xl-3">
                 <div class="admin-apartment-card apartment-card">
-                    @if (!string.IsNullOrEmpty(apartment.HeroImageUrl))
+                    @if (!string.IsNullOrEmpty(apartment.ImageUrl))
                     {
-                        <img src="@apartment.HeroImageUrl" alt="@apartment.Title" class="card-img-top">
+                        <img src="@apartment.ImageUrl" alt="@apartment.Title" class="card-img-top">
                     }
                     else
                     {

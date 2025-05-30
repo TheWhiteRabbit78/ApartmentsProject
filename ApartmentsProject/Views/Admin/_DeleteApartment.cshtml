@@ -1,5 +1,17 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model ApartmentsProject.Models.Apartment
+
+<div class="modal-header bg-danger text-white">
+    <h5 class="modal-title">Obriši stan</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+<form class="modal-form" asp-action="DeleteApartment" method="post">
+    <div class="modal-body">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <p>Jeste li sigurni da želite obrisati stan <strong>@Model.Title</strong>?</p>
+        <p class="text-muted">Ova akcija je nepovratna i obrisat će se sve slike povezane sa stanom.</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+        <button type="submit" class="btn btn-danger">Obriši</button>
+    </div>
+</form>

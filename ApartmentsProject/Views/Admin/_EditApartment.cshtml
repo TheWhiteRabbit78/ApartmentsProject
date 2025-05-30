@@ -1,5 +1,111 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model ApartmentsProject.Models.Apartment
+
+<div class="modal-header">
+    <h5 class="modal-title">Uredi stan - @Model.Title</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<form class="modal-form" asp-action="EditApartment" method="post" enctype="multipart/form-data">
+    <div class="modal-body">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input asp-for="Title" class="form-control" placeholder="Naslov">
+                    <label asp-for="Title">Naslov</label>
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input asp-for="SurfaceArea" class="form-control" placeholder="Površina">
+                    <label asp-for="SurfaceArea">Površina (npr. 52.07 m²)</label>
+                    <span asp-validation-for="SurfaceArea" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input asp-for="Rooms" class="form-control" placeholder="Broj soba">
+                    <label asp-for="Rooms">Broj soba</label>
+                    <span asp-validation-for="Rooms" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating mb-3">
+                    <input asp-for="Floor" class="form-control" placeholder="Kat">
+                    <label asp-for="Floor">Kat</label>
+                    <span asp-validation-for="Floor" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Price" type="number" class="form-control" placeholder="Cijena">
+            <label asp-for="Price">Cijena (€)</label>
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <textarea asp-for="Description" class="form-control" placeholder="Opis" style="height: 100px"></textarea>
+            <label asp-for="Description">Opis</label>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="IsAvailable" class="form-check-input" type="checkbox">
+            <label asp-for="IsAvailable" class="form-check-label">Dostupan</label>
+        </div>
+
+        @if (Model.Images?.Any() == true)
+        {
+            <div class="mb-3">
+                <h6>Postojeće slike:</h6>
+                <div class="row">
+                    @foreach (var image in Model.Images)
+                    {
+                        <div class="col-md-3 mb-2">
+                            <div class="card">
+                                <img src="/assets/images/@image.FileName" class="card-img-top" style="height: 80px; object-fit: cover;">
+                                <div class="card-body p-1 text-center">
+                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                            onclick="deleteImage(@image.Id)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="mb-3">
+            <label for="imageFiles" class="form-label">Dodaj nove slike</label>
+            <input type="file" class="form-control" id="imageFiles" name="imageFiles" multiple accept="image/*">
+            <div class="form-text">Možete odabrati više slika odjednom.</div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+        <button type="submit" class="btn btn-primary">Spremi promjene</button>
+    </div>
+</form>
+
+<script>
+    function deleteImage(imageId) {
+        if (confirm('Jeste li sigurni da želite obrisati ovu sliku?')) {
+            $.post('@Url.Action("DeleteImage", "Admin")', { imageId: imageId }, function(response) {
+                if (response.success) {
+                    showNotification(response.message, 'success');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showNotification(response.message, 'danger');
+                }
+            });
+        }
+    }
+</script>
