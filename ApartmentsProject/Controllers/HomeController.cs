@@ -25,7 +25,7 @@ public class HomeController(ApplicationDbContext context, IEmailService emailSer
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]    
     public async Task<IActionResult> SubmitContact(string fullName, string email, string phone, string message, int? apartmentId)
     {
         try
@@ -54,8 +54,6 @@ public class HomeController(ApplicationDbContext context, IEmailService emailSer
                 <p><strong>Poruka:</strong></p>
                 <p>{message.Replace("\n", "<br>")}</p>
             ";
-
-            //await _emailService.SendEmailAsync("info@fabrikon.hr", $"Nova poruka od {fullName}", emailBody);
 
             await _emailService.SendEmailAsync(_emailSettings.SenderEmail, $"Nova poruka od {fullName}", emailBody);
 

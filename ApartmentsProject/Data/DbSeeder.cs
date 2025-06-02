@@ -12,7 +12,7 @@ namespace ApartmentsProject.Data
             using var scope = serviceProvider.CreateScope();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-            const string adminEmail = "admin@fabrikon.hr";
+            const string adminEmail = "admin@zoro.hr";
             const string adminPassword = "Admin123!";
 
             var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
