@@ -117,7 +117,7 @@
                             <div class="apartment-card" data-bs-toggle="modal" data-bs-target="#apartmentModal@(apartment.Id)">
                                 @if (!string.IsNullOrEmpty(apartment.ImageUrl))
                                 {
-                                    <img src="@apartment.ImageUrl" alt="@apartment.Title" class="card-img-top">
+                                    <img src="@apartment.ImageUrl" alt="@apartment.Title" class="card-img-top" loading="lazy">
                                 }
                                 else
                                 {
@@ -178,6 +178,7 @@
                                                                  class="d-block w-100 lightbox-trigger"                                                                 
                                                                  data-apartment-id="@apartment.Id"
                                                                  data-image-index="@i"
+                                                                 loading="lazy"
                                                                  data-title="@apartment.Title">                                                            
                                                         </div>
                                                     }
