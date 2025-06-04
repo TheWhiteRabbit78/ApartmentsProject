@@ -2,6 +2,7 @@ using ApartmentsProject.Data;
 using ApartmentsProject.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MimeKit.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +61,9 @@ app.MapRazorPages();
 // Seed data
 using (var scope = app.Services.CreateScope())
 {
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
+
     await DbSeeder.SeedAdminUser(scope.ServiceProvider);
     await DbSeeder.SeedApartments(scope.ServiceProvider);
 }
