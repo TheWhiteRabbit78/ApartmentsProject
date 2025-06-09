@@ -142,9 +142,6 @@ body {
         box-shadow: 0 4px 12px rgba(218, 116, 34, 0.3);
     }
 
-/* ==============================================
-   SECTIONS & HEADINGS
-   ============================================== */
 .section-heading {
     font-size: 2.75rem;
     font-weight: 700;
@@ -166,9 +163,6 @@ body {
         border-radius: 2px;
     }
 
-/* ==============================================
-   CARDS
-   ============================================== */
 .feature-card, .contact-card {
     background-color: var(--white);
     border-radius: 12px;
@@ -262,9 +256,6 @@ body {
     height: 220px;
 }
 
-/* ==============================================
-   FORMS
-   ============================================== */
 .form-control {
     border: 2px solid var(--border);
     border-radius: 8px;
@@ -277,46 +268,6 @@ body {
         box-shadow: 0 0 0 0.2rem rgba(27, 110, 194, 0.15);
     }
 
-/* ==============================================
-   MODALS
-   ============================================== */
-.modal-content {
-    border-radius: 15px;
-    border: none;
-    box-shadow: 0 20px 40px rgba(0, 62, 103, 0.15);
-}
-
-.modal-header {
-    border-bottom: 1px solid var(--border);
-    padding: 1.5rem 2rem;
-}
-
-.modal-title {
-    color: var(--primary);
-    font-weight: 600;
-}
-
-.modal-detail {
-    background-color: var(--light);
-    border-radius: 8px;
-    padding: 1rem;
-    border-left: 3px solid var(--accent);
-}
-
-.carousel-item img {
-    height: 400px;
-    object-fit: cover;
-}
-
-.carousel-control-prev-icon, .carousel-control-next-icon {
-    background-color: rgba(0, 62, 103, 0.8);
-    border-radius: 50%;
-    padding: 1rem;
-}
-
-/* ==============================================
-   ADMIN STYLES
-   ============================================== */
 .admin-apartment-card {
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -352,9 +303,6 @@ body {
         margin-bottom: 1rem;
     }
 
-/* ==============================================
-   UTILITIES
-   ============================================== */
 .bg-light {
     background-color: var(--light) !important;
 }
@@ -400,23 +348,8 @@ button.accept-policy {
 footer {
     background: linear-gradient(135deg, var(--primary) 0%, #001A2E 100%);
     color: var(--white);
-    padding: 2rem 0;
-    margin-top: 4rem;
+    padding: 2rem 0;    
 }
-
-/* Notification area */
-#notification-area {
-    position: fixed;
-    top: 80px;
-    right: 20px;
-    z-index: 9999;
-    max-width: 400px;
-}
-
-    #notification-area .alert {
-        margin-bottom: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
 
 /* Loading states */
 .btn .spinner-border-sm {
@@ -450,9 +383,6 @@ footer {
         transform: scale(1.02);
     }
 
-/* ==============================================
-   RESPONSIVE DESIGN
-   ============================================== */
 @media (max-width: 768px) {
     .hero-content h1 {
         font-size: 2.5rem;
@@ -462,35 +392,8 @@ footer {
         font-size: 2.2rem;
     }
 
-    .apartment-card img, .carousel-item img {
+    .apartment-card img {
         height: 200px;
-    }
-
-    .lightbox-close {
-        top: 20px;
-        right: 20px;
-        width: 45px;
-        height: 45px;
-    }
-
-    .lightbox-nav {
-        width: 50px;
-        height: 50px;
-    }
-
-    .lightbox-prev {
-        left: 10px;
-    }
-
-    .lightbox-next {
-        right: 10px;
-    }
-
-    .lightbox-info {
-        bottom: 20px;
-        left: 10px;
-        right: 10px;
-        transform: none;
     }
 }
 
@@ -508,9 +411,6 @@ footer {
     }
 }
 
-/* ==============================================
-   IDENTITY PAGES STYLES
-   ============================================== */
 .identity-container {
     min-height: 80vh;
     display: flex;
@@ -602,3 +502,9 @@ footer {
     .remember-me input[type="checkbox"] {
         margin-right: 0.5rem;
     }
+
+
+a {
+    text-decoration:none;
+    color: var(--accent);
+}

@@ -17,11 +17,17 @@ public class HomeController(ApplicationDbContext context, IEmailService emailSer
     {
         var apartments = await _context.Apartments
             .Include(a => a.Images)
-            .Where(a => a.IsAvailable)
             .OrderBy(a => a.Id)
             .ToListAsync();
 
         return View(apartments);
+    }
+
+    public IActionResult ApartmentDetails(int id) {
+
+        Apartment? apartment = _context.Apartments.Include(a => a.Images).Where(a => a.Id == id).FirstOrDefault();
+
+        return View(apartment);
     }
 
     [HttpPost]
