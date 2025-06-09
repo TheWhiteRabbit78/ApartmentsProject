@@ -28,7 +28,7 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
-        <div class="container">
+        <div class="@(User.Identity.IsAuthenticated ? "container-fluid" : "container")">
             <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                 <span>Zoro</span> projekt
             </a>
