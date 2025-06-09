@@ -26,14 +26,41 @@
         });
 
         // Smooth scroll for navigation links
-        document.querySelectorAll('.scroll-link').forEach(link => {
+        //document.querySelectorAll('.nav-link .scroll-link').forEach(link => {
+        //    link.addEventListener('click', function (e) {
+        //        e.preventDefault();
+        //        const targetId = this.getAttribute('href');
+        //        const targetSection = document.querySelector(targetId);
+
+        //        if (targetSection) {
+        //            const navbarHeight = navbar.offsetHeight;
+        //            const targetPosition = targetSection.offsetTop - navbarHeight - 20;
+        //            //const targetPosition = targetSection.offsetTop + 150;
+
+        //            window.scrollTo({
+        //                top: targetPosition,
+        //                behavior: 'smooth'
+        //            });
+        //        }
+
+        //        // Close mobile menu if open
+        //        const navbarCollapse = document.querySelector('.navbar-collapse');
+        //        if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+        //            const bsCollapse = new bootstrap.Collapse(navbarCollapse);
+        //            bsCollapse.hide();
+        //        }
+        //    });
+        //});
+
+        document.querySelectorAll('.nav-link[href^="#"] .scroll-link').forEach(link => {
             link.addEventListener('click', function (e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
                 const targetSection = document.querySelector(targetId);
 
                 if (targetSection) {
-                    const navbarHeight = navbar.offsetHeight;
+                    const navbar = document.querySelector('.navbar');
+                    const navbarHeight = navbar ? navbar.offsetHeight : 0;
                     const targetPosition = targetSection.offsetTop - navbarHeight - 20;
 
                     window.scrollTo({
@@ -42,7 +69,6 @@
                     });
                 }
 
-                // Close mobile menu if open
                 const navbarCollapse = document.querySelector('.navbar-collapse');
                 if (navbarCollapse && navbarCollapse.classList.contains('show')) {
                     const bsCollapse = new bootstrap.Collapse(navbarCollapse);

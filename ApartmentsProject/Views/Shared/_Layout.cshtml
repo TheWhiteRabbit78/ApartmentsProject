@@ -3,8 +3,18 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Luksuzni stanovi u Zagrebu - Stambena zgrada Blato. Moderna arhitektura, izvrsna lokacija.">
-    <title>@ViewData["Title"] - Zoro Projekt</title>
+
+    <!-- SEO Meta Tags -->
+    <title>@ViewData["Title"] - Zoro Projekt | Stanovi u Zagrebu, Hrvatska</title>
+    <meta name="description" content="Zoro Projekt - Luksuzni stanovi u Zagrebu, Hrvatska. Moderna arhitektura, odlična lokacija u naselju Blato. Idealno za obitelji i investitore.">    
+    <meta name="author" content="Zoro Projekt">
+
+    <!-- Open Graph (for social media sharing) -->
+    <meta property="og:title" content="Zoro Projekt - Stanovi u Zagrebu" />
+    <meta property="og:description" content="Luksuzni stanovi u naselju Blato, Zagreb. Pogledajte našu ponudu stanova." />
+    <meta property="og:image" content="https://yourdomain.com/images/og-image.jpg" />
+    <meta property="og:url" content="https://yourdomain.com/" />
+    <meta property="og:type" content="website" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
@@ -14,6 +24,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
@@ -58,19 +69,18 @@
                 }
                 else
                 {
-                    <!-- Public Navigation -->
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "Home")">Početna</a>
+                            <a class="nav-link" href="@($"{Url.Action("Index", "Home")}#home")">Početna</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#about">O Projektu</a>
+                            <a class="nav-link" href="@($"{Url.Action("Index", "Home")}#about")">O Projektu</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#apartments">Stanovi</a>
+                            <a class="nav-link" href="@($"{Url.Action("Index", "Home")}#apartments")">Stanovi</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#contact">Kontakt</a>
+                            <a class="nav-link" href="@($"{Url.Action("Index", "Home")}#contact")">Kontakt</a>
                         </li>
                     </ul>
                 }
@@ -79,7 +89,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main style="padding-top: 80px;">
+    <main>
         @RenderBody()
     </main>
 
