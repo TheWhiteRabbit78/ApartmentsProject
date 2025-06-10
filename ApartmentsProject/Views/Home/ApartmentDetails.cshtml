@@ -20,9 +20,11 @@
                 {
                     var image = Model.Images[i];
                     <div class="carousel-item @(i == 0 ? "active" : "")">
-                        <img src="/assets/images/@image.FileName"
-                             class="carousel-image"
-                             alt="Slide @(i + 1)">
+                        <a href="/assets/images/@image.FileName" data-toggle="lightbox" data-size="fullscreen">
+                            <img src="/assets/images/@image.FileName"
+                                 class="carousel-image"
+                                 alt="Slide @(i + 1)">
+                        </a>
                     </div>
                 }
             </div>
