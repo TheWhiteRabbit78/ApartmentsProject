@@ -1,71 +1,85 @@
 ﻿@model ApartmentsProject.Models.Apartment
 
-<section class="apartment-details vh-100 bg-light py-5">
-    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            @for (int i = 0; i < Model.Images.Count; i++)
-            {
-                <button type="button"
-                        data-bs-target="#carouselExampleCaptions"
-                        data-bs-slide-to="@i"
-                        class="@(i == 0 ? "active" : "")"
-                        aria-current="@(i == 0 ? "true" : null)"
-                        aria-label="Slide @(i + 1)">
-                </button>
-            }
+<section class="apartment-details d-flex justify-content-center py-5 bg-light">
+    <div class="container my-5">
+        <div id="carouselExampleCaptions" class="carousel slide mb-5 fixed-carousel" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                @for (int i = 0; i < Model.Images.Count; i++)
+                {
+                    <button type="button"
+                            data-bs-target="#carouselExampleCaptions"
+                            data-bs-slide-to="@i"
+                            class="@(i == 0 ? "active" : "")"
+                            aria-current="@(i == 0 ? "true" : null)"
+                            aria-label="Slide @(i + 1)">
+                    </button>
+                }
+            </div>
+            <div class="carousel-inner">
+                @for (int i = 0; i < Model.Images.Count; i++)
+                {
+                    var image = Model.Images[i];
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <img src="/assets/images/@image.FileName"
+                             class="carousel-image"
+                             alt="Slide @(i + 1)">
+                    </div>
+                }
+            </div>
+            <button class="carousel-control-prev color" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
 
-        <div class="carousel-inner">
-            @for (int i = 0; i < Model.Images.Count; i++)
-            {
-                var image = Model.Images[i];
-                <div class="carousel-item @(i == 0 ? "active" : "")">
-                    <img src="/assets/images/@image.FileName" class="d-block w-100" alt="Slide @(i + 1)" style="max-height:500px;">
+        <!-- Feature Grid -->
+        <div class="row text-center g-4 mb-5">
+            <div class="col-md-3">
+                <div class="p-4 rounded shadow-sm bg-white h-100">
+                    <i class="fas fa-euro-sign fa-2x mb-2" style="color: var(--secondary);"></i>
+                    <h5 class="fw-bold" style="color: var(--dark);">Cijena</h5>
+                    <p class="text-muted mb-0">@Model.Price.ToString("N0") €</p>
                 </div>
-            }
-        </div>
-
-        <button class="carousel-control-prev color" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-    <!-- Description -->
-    <div class="description mb-5">
-        <!-- Title and Basic Info -->
-        <header class="mb-4">
-            <h1 class="fw-bold">@Model.Title</h1>
-            <p class="text-muted">@Model.Rooms</p>
-        </header>
-
-        <h2 class="h5 fw-semibold mb-2">Opis</h2>
-        <p class="text-muted">@Model.Description</p>
-    </div>
-
-    <!-- Key Facts Grid -->
-    <div class="key-facts mb-5">
-        <div class="row">
-            <div class="col-md-3 col-6 mb-3">
-                <p class="small text-muted mb-1">Cijena</p>
-                <p class="fw-semibold mb-0">@Model.Price.ToString("N0") €</p>
             </div>
-            <div class="col-md-3 col-6 mb-3">
-                <p class="small text-muted mb-1">Površina</p>
-                <p class="fw-semibold mb-0">@Model.SurfaceArea m²</p>
+            <div class="col-md-3">
+                <div class="p-4 rounded shadow-sm bg-white h-100">
+                    <i class="fas fa-expand-arrows-alt fa-2x mb-2" style="color: var(--secondary);"></i>
+                    <h5 class="fw-bold" style="color: var(--dark);">Površina</h5>
+                    <p class="text-muted mb-0">@Model.SurfaceArea m²</p>
+                </div>
             </div>
-            <div class="col-md-3 col-6 mb-3">
-                <p class="small text-muted mb-1">Kat</p>
-                <p class="fw-semibold mb-0">@Model.Floor</p>
+            <div class="col-md-3">
+                <div class="p-4 rounded shadow-sm bg-white h-100">
+                    <i class="fas fa-building fa-2x mb-2" style="color: var(--secondary);"></i>
+                    <h5 class="fw-bold" style="color: var(--dark);">Kat</h5>
+                    <p class="text-muted mb-0">@Model.Floor</p>
+                </div>
             </div>
-            <div class="col-md-3 col-6 mb-3">
-                <p class="small text-muted mb-1">Parking</p>
-                <p class="fw-semibold mb-0">Dostupno</p>
+            <div class="col-md-3">
+                <div class="p-4 rounded shadow-sm bg-white h-100">
+                    <i class="fas fa-parking fa-2x mb-2" style="color: var(--secondary);"></i>
+                    <h5 class="fw-bold" style="color: var(--dark);">Parking</h5>
+                    <p class="text-muted mb-0">Dostupno</p>
+                </div>
             </div>
         </div>
+
+        <!-- Description -->
+        <div class="description my-5">
+            <!-- Title and Basic Info -->
+            <header class="mb-4">
+                <h1 class="fw-bold">@Model.Title</h1>
+                <p class="text-muted">@Model.Rooms</p>
+            </header>
+
+            <h2 class="h5 fw-semibold mb-2">Opis</h2>
+            <p class="text-muted">@Model.Description</p>
+        </div> 
     </div>
 </section>
 
+<partial name="_ContactForm" />

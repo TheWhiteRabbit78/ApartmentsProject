@@ -41,8 +41,6 @@
                         const navbarHeight = navbar.offsetHeight;
                         const targetPosition = targetSection.offsetTop - navbarHeight + 20;
 
-                        console.log(targetPosition);
-
                         window.scrollTo({
                             top: targetPosition,
                             behavior: 'smooth'
