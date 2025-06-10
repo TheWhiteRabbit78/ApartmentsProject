@@ -19,34 +19,6 @@
 
 <section id="about" class="py-5 d-flex justify-content-center" style="background-color: var(--light);">
     <div class="container my-5">
-        <!-- Text Content -->
-        <h2 class="text-center fw-bold mb-3" style="color: var(--primary);">O Projektu</h2>
-        <p class="text-center text-muted fs-5 mb-4">Moderna stambena zgrada s 32 luksuzna stana</p>
-
-        <div class="row justify-content-center mb-5">
-            <div class="col-lg-10">
-                <h3 class="fw-semibold mb-3" style="color: var(--primary-dark);">Stambena zgrada k.č.br. 3388/1</h3>
-                <p class="text-justify text-dark">
-                    Moderan stambeni kompleks koji nudi savršenu kombinaciju udobnosti, funkcionalnosti i elegancije.
-                    Projekt je pažljivo osmišljen kako bi zadovoljio potrebe suvremenog načina života. Korišteni su visoko
-                    kvalitetni materijali, energetski učinkovita rješenja i moderni arhitektonski pristupi. Svaki stan nudi
-                    maksimalan komfor uz obilje prirodnog svjetla, prostrane tlocrtne rasporede te privatne terase ili balkone.
-                    Zgrada se smješta u naselju Blato – poznato po svojoj tišini, zelenilu i brzoj povezanosti s ostatkom grada.
-                </p>
-                <p class="text-justify text-dark">
-                    Stanovi variraju od manjih jednosobnih do prostranih četverosobnih jedinica, što omogućava izbor prema vašim potrebama.
-                    Svi stanovi su opremljeni modernim instalacijama, podnim grijanjem, vrhunskom stolarijom i energetskim sustavima.
-                </p>
-                <p class="text-justify text-dark">
-                    Investitor projekta, <strong>Zoro projekt d.o.o.</strong>, renomirana je domaća tvrtka s bogatim iskustvom u izgradnji stambenih objekata.
-                    Njihov fokus je na visokoj kvaliteti, sigurnosti i transparentnosti kroz cijeli proces kupnje.
-                </p>
-                <p class="text-justify text-dark">
-                    Uz odličnu prometnu povezanost, mirnu okolinu i cjelovito planiran koncept gradnje, ovaj projekt predstavlja izvrsnu priliku za sigurno ulaganje ili stvaranje novog doma.
-                </p>
-            </div>
-        </div>
-
         <!-- Carousel -->
         <div id="aboutCarousel" class="carousel slide mb-5 shadow-sm rounded overflow-hidden" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -99,6 +71,34 @@
                 </div>
             </div>
         </div>
+        <!-- Text Content -->
+        <h2 class="text-center fw-bold mb-3" style="color: var(--primary);">O Projektu</h2>
+        <p class="text-center text-muted fs-5 mb-4">Moderna stambena zgrada s 32 luksuzna stana</p>
+
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <h3 class="fw-semibold mb-3" style="color: var(--primary-dark);">Stambena zgrada k.č.br. 3388/1</h3>
+                <p class="text-justify text-dark">
+                    Moderan stambeni kompleks koji nudi savršenu kombinaciju udobnosti, funkcionalnosti i elegancije.
+                    Projekt je pažljivo osmišljen kako bi zadovoljio potrebe suvremenog načina života. Korišteni su visoko
+                    kvalitetni materijali, energetski učinkovita rješenja i moderni arhitektonski pristupi. Svaki stan nudi
+                    maksimalan komfor uz obilje prirodnog svjetla, prostrane tlocrtne rasporede te privatne terase ili balkone.
+                    Zgrada se smješta u naselju Blato – poznato po svojoj tišini, zelenilu i brzoj povezanosti s ostatkom grada.
+                </p>
+                <p class="text-justify text-dark">
+                    Stanovi variraju od manjih jednosobnih do prostranih četverosobnih jedinica, što omogućava izbor prema vašim potrebama.
+                    Svi stanovi su opremljeni modernim instalacijama, podnim grijanjem, vrhunskom stolarijom i energetskim sustavima.
+                </p>
+                <p class="text-justify text-dark">
+                    Investitor projekta, <strong>Zoro projekt d.o.o.</strong>, renomirana je domaća tvrtka s bogatim iskustvom u izgradnji stambenih objekata.
+                    Njihov fokus je na visokoj kvaliteti, sigurnosti i transparentnosti kroz cijeli proces kupnje.
+                </p>
+                <p class="text-justify text-dark">
+                    Uz odličnu prometnu povezanost, mirnu okolinu i cjelovito planiran koncept gradnje, ovaj projekt predstavlja izvrsnu priliku za sigurno ulaganje ili stvaranje novog doma.
+                </p>
+            </div>
+        </div>
+
     </div>
 </section>
 
@@ -112,8 +112,44 @@
             @foreach (var apartment in Model)
             {
                 <div class="col-md-6 col-lg-4">
-                    <a href="@Url.Action("ApartmentDetails", "Home", new { id = apartment.Id })" class="text-decoration-none">
-                        <div class="apartment-card">
+                    @if (apartment.IsAvailable)
+                    {
+                        <a href="@Url.Action("ApartmentDetails", "Home", new { id = apartment.Id })" class="text-decoration-none">
+                            <div class="apartment-card">
+                                <div class="apartment-card-image">
+                                    @if (!string.IsNullOrEmpty(apartment.ImageUrl))
+                                    {
+                                        <img src="@apartment.ImageUrl" alt="@apartment.Title">
+                                    }
+                                    else
+                                    {
+                                        <div class="placeholder-image">
+                                            <i class="fas fa-home fa-3x"></i>
+                                            <p class="mt-2">Nema slike</p>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="apartment-card-body">
+                                    <h3 class="apartment-card-title">@apartment.Title</h3>
+                                    <p class="apartment-card-subtitle">@apartment.Rooms</p>
+                                    <div class="apartment-info">
+                                        <div class="apartment-feature">
+                                            <i class="fas fa-expand"></i>
+                                            <span>@apartment.SurfaceArea</span>
+                                        </div>
+                                        <div class="apartment-feature">
+                                            <i class="fas fa-layer-group"></i>
+                                            <span>@apartment.Floor</span>
+                                        </div>
+                                    </div>
+                                    <p class="apartment-price">€@apartment.Price.ToString("N0")</p>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <div class="apartment-card apartment-sold">
                             <div class="apartment-card-image">
                                 @if (!string.IsNullOrEmpty(apartment.ImageUrl))
                                 {
@@ -126,15 +162,11 @@
                                         <p class="mt-2">Nema slike</p>
                                     </div>
                                 }
-                                @if (apartment.IsAvailable)
-                                {
-                                    <span class="apartment-status">Dostupan</span>
-                                }
+                              
                             </div>
                             <div class="apartment-card-body">
                                 <h3 class="apartment-card-title">@apartment.Title</h3>
                                 <p class="apartment-card-subtitle">@apartment.Rooms</p>
-
                                 <div class="apartment-info">
                                     <div class="apartment-feature">
                                         <i class="fas fa-expand"></i>
@@ -145,11 +177,10 @@
                                         <span>@apartment.Floor</span>
                                     </div>
                                 </div>
-
                                 <p class="apartment-price">€@apartment.Price.ToString("N0")</p>
                             </div>
                         </div>
-                    </a>
+                    }
                 </div>
             }
         </div>

@@ -1,11 +1,10 @@
 ﻿@model IEnumerable<ApartmentsProject.Models.Apartment>
 
 @{
-    ViewData["Title"] = "Upravljanje Stanovima";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Upravljanje Stanovima";   
 }
 
-<div class="container-fluid">
+<div class="container py-5 my-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Upravljanje Stanovima</h2>
         <button type="button" class="btn btn-primary" onclick="openApartmentModal(0)">
@@ -77,7 +76,6 @@
     }
 </div>
 
-<!-- Generic Modal Container -->
 <div class="modal fade" id="genericModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" id="modal-content">
@@ -88,7 +86,6 @@
 
 @section Scripts {
     <script>
-        // Generic Modal Functions
         function openApartmentModal(id = 0) {
             $.get('@Url.Action("GetApartmentModal", "Admin")', { id: id }, function (data) {
                 $('#modal-content').html(data);
@@ -103,7 +100,6 @@
             });
         }
 
-        // Form submission handler
         $(document).on('submit', '.modal-form', function (e) {
             e.preventDefault();
 

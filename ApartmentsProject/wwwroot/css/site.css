@@ -290,6 +290,8 @@ section {
     transition: var(--transition);
     height: 100%;
     cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
 }
 
     .apartment-card:hover {
@@ -342,6 +344,43 @@ section {
     font-size: 0.95rem;
     margin-bottom: 1rem;
 }
+
+
+
+.apartment-card.apartment-sold {
+    position: relative;
+}
+
+    .apartment-card.apartment-sold::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(220, 50, 70, 0.37); /* Red overlay with transparency */
+        z-index: 1;
+        pointer-events: none; /* Allows clicking through the overlay */
+        border-radius: inherit; /* Match the card's border radius */
+    }
+
+    .apartment-card.apartment-sold::after {
+        content: 'PRODANO';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-15deg);
+        background-color: #dc3545;
+        color: white;
+        font-weight: bold;
+        font-size: 1.5rem;
+        padding: 10px 20px;
+        border: 3px solid white;
+        border-radius: 5px;
+        z-index: 1;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
 
 .apartment-info {
     display: flex;
@@ -681,7 +720,7 @@ section {
 footer {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: var(--white);
-    padding: 3rem 0 2rem;    
+    padding: 3rem 0 2rem;
 }
 
 .footer-content {
