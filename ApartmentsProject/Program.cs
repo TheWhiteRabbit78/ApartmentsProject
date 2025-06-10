@@ -1,6 +1,7 @@
 using ApartmentsProject.Data;
 using ApartmentsProject.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using MimeKit.Cryptography;
 
@@ -30,6 +31,7 @@ builder.Services.AddControllersWithViews();
 // Email service
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailSender, EmailService>();
 
 var app = builder.Build();
 

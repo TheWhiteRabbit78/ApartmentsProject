@@ -9,6 +9,7 @@
         initializeForms();
         initializeGallery();
         initializeTooltips();
+        initializeAdminModals();
         setCurrentYear();
     });
 
@@ -25,37 +26,59 @@
             }
         });
 
-        document.querySelectorAll('a[href*="#"]').forEach(link => {
+        // Handle hash link navigation
+        document.querySelectorAll('a[href*="#"]:not(.dropdown-toggle)').forEach(link => {
             link.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
                 const hashIndex = href.indexOf('#');
 
                 if (hashIndex !== -1) {
-                    e.preventDefault();
                     let targetId = href.substring(hashIndex);
                     targetId = targetId.replace(/['"\s]/g, '');
-
                     const targetSection = document.querySelector(targetId);
+
+                    // Only prevent default if target exists on current page
                     if (targetSection) {
+                        e.preventDefault();
                         const navbar = document.querySelector('.navbar');
-                        const navbarHeight = navbar.offsetHeight;
+                        const navbarHeight = navbar ? navbar.offsetHeight : 0;
                         const targetPosition = targetSection.offsetTop - navbarHeight + 20;
 
                         window.scrollTo({
                             top: targetPosition,
                             behavior: 'smooth'
                         });
-                    }
 
-                    // Close mobile menu
-                    const navbarCollapse = document.querySelector('.navbar-collapse');
-                    if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-                        const bsCollapse = new bootstrap.Collapse(navbarCollapse);
-                        bsCollapse.hide();
+                        // Close mobile menu
+                        const navbarCollapse = document.querySelector('.navbar-collapse');
+                        if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                            const bsCollapse = new bootstrap.Collapse(navbarCollapse);
+                            bsCollapse.hide();
+                        }
                     }
+                    // If target doesn't exist, let browser handle normal navigation
                 }
             });
         });
+
+        // Handle scrolling after page load when coming from a different page with hash
+        if (window.location.hash) {
+            setTimeout(() => {
+                const targetId = window.location.hash.replace(/['"\s]/g, '');
+                const targetSection = document.querySelector(targetId);
+
+                if (targetSection) {
+                    const navbar = document.querySelector('.navbar');
+                    const navbarHeight = navbar ? navbar.offsetHeight : 0;
+                    const targetPosition = targetSection.offsetTop - navbarHeight + 20;
+
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 100); // Small delay to ensure page is fully rendered
+        }
     }
 
     // Scroll animations
@@ -243,6 +266,95 @@
             </div>
         `;
     }
+
+    // Admin modal functionality
+    function initializeAdminModals() {
+        // Only initialize if we're on an admin page or if jQuery is available
+        if (typeof $ === 'undefined') return;
+
+        // Modal form submission handler
+        $(document).on('submit', '.modal-form', function (e) {
+            e.preventDefault();
+            const form = $(this);
+            const formData = new FormData(this);
+
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.isValid) {
+                        $('#genericModal').modal('hide');
+                        showNotification(response.message, 'success');
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        $('#modal-content').html(response.html);
+                    }
+                },
+                error: function () {
+                    showNotification('Došlo je do greške. Molimo pokušajte ponovo.', 'danger');
+                }
+            });
+        });
+    }
+
+    // Admin modal functions (attach to window object so they're globally accessible)
+    window.openApartmentModal = function (id = 0) {
+        if (typeof $ === 'undefined') return;
+
+        // Get URLs from data attributes or global variables
+        const getApartmentModalUrl = document.body.dataset.getApartmentModalUrl || '/Admin/GetApartmentModal';
+
+        $.get(getApartmentModalUrl, { id: id }, function (data) {
+            $('#modal-content').html(data);
+            $('#genericModal').modal('show');
+        });
+    };
+
+    window.openDeleteApartmentModal = function (id) {
+        if (typeof $ === 'undefined') return;
+
+        // Get URLs from data attributes or global variables
+        const getDeleteApartmentModalUrl = document.body.dataset.getDeleteApartmentModalUrl || '/Admin/GetDeleteApartmentModal';
+
+        $.get(getDeleteApartmentModalUrl, { id: id }, function (data) {
+            $('#modal-content').html(data);
+            $('#genericModal').modal('show');
+        });
+    };
+
+    // Show notification helper (updated to work with both jQuery and vanilla JS)
+    function showNotification(message, type) {
+        // Try jQuery first
+        if (typeof $ !== 'undefined' && $('#notification-area').length) {
+            const alert = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                          </div>`;
+            $('#notification-area').html(alert);
+            setTimeout(() => $('.alert').fadeOut(), 5000);
+        } else {
+            // Fallback to vanilla JS version
+            const notificationArea = document.getElementById('notification-area');
+            if (notificationArea) {
+                notificationArea.innerHTML = `
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+                setTimeout(() => {
+                    const alert = notificationArea.querySelector('.alert');
+                    if (alert) alert.remove();
+                }, 5000);
+            }
+        }
+    }
+
+    // Make showNotification globally accessible
+    window.showNotification = showNotification;
 
     // Add CSS animation classes
     const style = document.createElement('style');

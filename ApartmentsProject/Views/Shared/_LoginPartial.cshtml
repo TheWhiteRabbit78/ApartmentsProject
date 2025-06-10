@@ -1,17 +1,33 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.UI.Services
+@using ApartmentsProject.Areas.Identity.Pages.Account.Manage
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Upravljanje računom</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Odjava</button>
-        </form>
-    </li>
-}
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                <i class="fas fa-cog me-1"></i> Upravljanje računom
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item @ManageNavPages.EmailNavClass(ViewContext)" asp-area="Identity" asp-page="/Account/Manage/Email">
+                        <i class="fas fa-envelope me-2"></i> Promjeni mail
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item @ManageNavPages.ChangePasswordNavClass(ViewContext)" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">
+                        <i class="fas fa-key me-2"></i> Promjeni lozinku
+                    </a>
+                </li>               
+            </ul>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="nav-link btn btn-link text-dark">Odjava</button>
+            </form>
+        </li>
+    }
 </ul>

@@ -4,34 +4,34 @@
     ViewData["Title"] = "Upravljanje korisnicima";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Upravljanje korisnicima</h2>
-        <div>
-            <button type="button" class="btn btn-primary" onclick="openCreateUserModal()">
-                <i class="fas fa-plus me-2"></i>Dodaj novog korisnika
-            </button>
+<section class="p-5">
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Upravljanje korisnicima</h2>
+            <div>
+                <button type="button" class="btn btn-primary" onclick="openCreateUserModal()">
+                    <i class="fas fa-plus me-2"></i>Dodaj novog korisnika
+                </button>
+            </div>
         </div>
-    </div>
 
-    <div id="notification-area"></div>
+        <div id="notification-area"></div>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Email</th>
-                            <th>Korisničko ime</th>
-                            <th>Email potvrđen</th>
-                            <th>Akcije</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in Model)
-                        {
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Korisničko ime</th>
+                                <th>Email potvrđen</th>
+                                <th>Akcije</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
                             <tr>
                                 <td>@user.Email</td>
                                 <td>@user.UserName</td>
@@ -47,14 +47,14 @@
                                     </button>
                                 </td>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
+</section>
 <!-- Generic Modal Container -->
 <div class="modal fade" id="genericModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">

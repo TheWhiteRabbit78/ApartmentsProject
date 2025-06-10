@@ -1,0 +1,57 @@
+﻿@page
+@model EmailModel
+@{
+    ViewData["Title"] = "Upravljanje e-mailom";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="identity-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="identity-card">
+                    <div class="identity-header">
+                        <h1>Upravljanje e-mailom</h1>
+                        <p>Promijenite svoju e-mail adresu</p>
+                    </div>
+                    <partial name="_StatusMessage" for="StatusMessage" />
+
+                    <form id="email-form" class="identity-form" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        @if (Model.IsEmailConfirmed)
+                        {
+                            <div class="form-floating mb-3">
+                                
+                                    <input asp-for="Email" class="form-control" disabled />
+                                    <label asp-for="Email" class="form-label">Trenutna e-mail adresa</label>                                    
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-floating mb-3">
+                                <input asp-for="Email" class="form-control" placeholder="Vaša e-mail adresa" disabled />
+                                <label asp-for="Email" class="form-label">Trenutna e-mail adresa</label>
+                            </div>
+                            <div class="mb-3">
+                                <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-outline-primary btn-sm">Pošaljite e-mail za potvrdu</button>
+                            </div>
+                        }
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.NewEmail" class="form-control" autocomplete="email" aria-required="true" placeholder="Nova e-mail adresa" />
+                            <label asp-for="Input.NewEmail" class="form-label">Nova e-mail adresa</label>
+                            <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+                        </div>
+
+                        <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="btn btn-primary identity-submit">Promijenite e-mail</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
