@@ -32,7 +32,7 @@
         });
 
         // Handle hash link navigation
-        document.querySelectorAll('.nav-link[href*="#"], .scroll-link[href*="#"]').forEach(link => {
+        document.querySelectorAll('.nav-link[href*="#"]:not(.dropdown-toggle), .scroll-link[href*="#"]').forEach(link => {
             link.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
                 const hashIndex = href.indexOf('#');

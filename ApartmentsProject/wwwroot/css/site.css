@@ -145,7 +145,7 @@ a {
     height: 100%;
     object-fit: cover;
     opacity: 0.7;
-    filter: brightness(0.7);
+    filter: brightness(0.9);
 }
 
 .hero-content {
@@ -583,8 +583,7 @@ section {
         margin-right: 1rem;
     }
 
-.map-container {
-    height: 400px;
+.map-container {    
     border-radius: 12px;
     overflow: hidden;
     box-shadow: var(--shadow-md);
@@ -969,3 +968,66 @@ footer {
         background: rgba(0, 255, 0, 0.3);
         border-color: #28a745;
     }
+
+hr {
+    border: none;
+    height: 4px;
+    background: linear-gradient( -45deg, var(--primary) 0%, var(--secondary) 35%, var(--primary) 65%, var(--secondary) 100% );
+    background-size: 400% 400%;
+    margin: 1.75rem 0;
+    border-radius: 2px;
+    animation: gradientShift 60s ease infinite;
+    filter: saturate(1.8) contrast(1.7);
+    position: relative;
+}
+
+    hr::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(2px);
+        border-radius: 2px;
+        pointer-events: none;
+    }
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    12.5% {
+        background-position: 25% 25%;
+    }
+
+    25% {
+        background-position: 50% 0%;
+    }
+
+    37.5% {
+        background-position: 75% 25%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    62.5% {
+        background-position: 75% 75%;
+    }
+
+    75% {
+        background-position: 50% 100%;
+    }
+
+    87.5% {
+        background-position: 25% 75%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}

@@ -24,17 +24,17 @@
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <a href="~/assets/images/building_side.jpg" data-toggle="lightbox" data-size="fullscreen">
-                        <img src="~/assets/images/building_side.jpg" class="d-block w-100" alt="Zgrada">
+                        <img src="~/assets/images/building_side.jpg" class="d-block w-100" alt="Zgrada" loading="lazy">
                     </a>
                 </div>
                 <div class="carousel-item">
                     <a href="~/assets/images/hero.jpg" data-toggle="lightbox" data-size="fullscreen">
-                        <img src="~/assets/images/hero.jpg" class="d-block w-100" alt="Zgrada">
+                        <img src="~/assets/images/hero.jpg" class="d-block w-100" alt="Zgrada" loading="lazy">
                     </a>
                 </div>
                 <div class="carousel-item">
                     <a href="~/assets/images/building_rear.jpg" data-toggle="lightbox" data-size="fullscreen">
-                        <img src="~/assets/images/building_rear.jpg" class="d-block w-100" alt="Zgrada">
+                        <img src="~/assets/images/building_rear.jpg" class="d-block w-100" alt="Zgrada" loading="lazy">
                     </a>
                 </div>
             </div>
@@ -110,14 +110,22 @@
 
 <!-- Apartments Section -->
 <section id="apartments" class="py-5">
-    <div class="container my-5">
+    <div class="container g-4 my-5">
+
+        <!-- Text Content -->
+        <h2 class="text-center fw-bold mb-3" style="color: var(--primary);">Dostupni stanovi</h2>        
+
+        <hr />
+
         <a href="~/assets/images/tlocrt_prizemlje.png" data-toggle="lightbox" data-size="fullscreen">
-            <img src="~/assets/images/tlocrt_prizemlje.png" style="max-width: 100%;" id="floor-plan-image" />
+            <img src="~/assets/images/tlocrt_prizemlje.png" style="max-width: 100%;" id="floor-plan-image" loading="lazy" />
         </a>
+        <h4 class="text-center fw-bold mb-3" style="color: var(--primary);">Prizemlje</h4>
+
         <div class="row my-3 g-4">
             @foreach (var apartment in Model.Where(a => a.Floor.Contains("Prizemlje")))
             {
-                <div class="col-md-6 col-lg-4">
+                <div class="col col-lg-3">
                     @if (apartment.IsAvailable)
                     {
                         <a href="@Url.Action("ApartmentDetails", "Home", new { id = apartment.Id })" class="text-decoration-none">
@@ -125,7 +133,7 @@
                                 <div class="apartment-card-image">
                                     @if (!string.IsNullOrEmpty(apartment.ImageUrl))
                                     {
-                                        <img src="@apartment.ImageUrl" alt="@apartment.Title">
+                                        <img src="@apartment.ImageUrl" alt="@apartment.Title" loading="lazy">
                                     }
                                     else
                                     {
@@ -159,7 +167,7 @@
                             <div class="apartment-card-image">
                                 @if (!string.IsNullOrEmpty(apartment.ImageUrl))
                                 {
-                                    <img src="@apartment.ImageUrl" alt="@apartment.Title">
+                                    <img src="@apartment.ImageUrl" alt="@apartment.Title" loading="lazy">
                                 }
                                 else
                                 {
@@ -192,9 +200,13 @@
 
         </div>
 
-        <a href="~/assets/images/tlocrt_prizemlje.png" data-toggle="lightbox" data-size="fullscreen">
-            <img src="~/assets/images/tlocrt_prizemlje.png" style="max-width: 100%;" id="floor-plan-image" />
+        <hr />
+
+        <a href="~/assets/images/tlocrt_prvi_kat.png" data-toggle="lightbox" data-size="fullscreen">
+            <img src="~/assets/images/tlocrt_prvi_kat.png" style="max-width: 100%;" id="floor-plan-image" loading="lazy" />
         </a>
+        <h4 class="text-center fw-bold mb-3" style="color: var(--primary);">1. Kat</h4>
+
         <div class="row my-3 g-4">
             @foreach (var apartment in Model.Where(a => a.Floor.Contains("1. Kat")))
             {
@@ -206,7 +218,7 @@
                                 <div class="apartment-card-image">
                                     @if (!string.IsNullOrEmpty(apartment.ImageUrl))
                                     {
-                                        <img src="@apartment.ImageUrl" alt="@apartment.Title">
+                                        <img src="@apartment.ImageUrl" alt="@apartment.Title" loading="lazy">
                                     }
                                     else
                                     {
@@ -240,7 +252,7 @@
                             <div class="apartment-card-image">
                                 @if (!string.IsNullOrEmpty(apartment.ImageUrl))
                                 {
-                                    <img src="@apartment.ImageUrl" alt="@apartment.Title">
+                                    <img src="@apartment.ImageUrl" alt="@apartment.Title" loading="lazy">
                                 }
                                 else
                                 {
@@ -273,9 +285,13 @@
 
         </div>
 
-        <a href="~/assets/images/tlocrt_prizemlje.png" data-toggle="lightbox" data-size="fullscreen">
-            <img src="~/assets/images/tlocrt_prizemlje.png" style="max-width: 100%;" id="floor-plan-image" />
+        <hr />
+
+        <a href="~/assets/images/tlocrt_drugi_kat.png" data-toggle="lightbox" data-size="fullscreen">
+            <img src="~/assets/images/tlocrt_drugi_kat.png" style="max-width: 100%;" id="floor-plan-image" loading="lazy" />
         </a>
+        <h4 class="text-center fw-bold mb-3" style="color: var(--primary);">2. Kat</h4>
+
         <div class="row my-3 g-4">
             @foreach (var apartment in Model.Where(a => a.Floor.Contains("2. Kat")))
             {
@@ -287,7 +303,7 @@
                                 <div class="apartment-card-image">
                                     @if (!string.IsNullOrEmpty(apartment.ImageUrl))
                                     {
-                                        <img src="@apartment.ImageUrl" alt="@apartment.Title">
+                                        <img src="@apartment.ImageUrl" alt="@apartment.Title" loading="lazy">
                                     }
                                     else
                                     {
@@ -321,7 +337,7 @@
                             <div class="apartment-card-image">
                                 @if (!string.IsNullOrEmpty(apartment.ImageUrl))
                                 {
-                                    <img src="@apartment.ImageUrl" alt="@apartment.Title">
+                                    <img src="@apartment.ImageUrl" alt="@apartment.Title" loading="lazy">
                                 }
                                 else
                                 {

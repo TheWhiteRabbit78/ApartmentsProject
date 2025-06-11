@@ -3,7 +3,6 @@ using ApartmentsProject.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using MimeKit.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
 
