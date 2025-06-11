@@ -111,11 +111,11 @@
 <!-- Apartments Section -->
 <section id="apartments" class="py-5">
     <div class="container my-5">
-        <h2 class="section-heading">Dostupni Stanovi</h2>
-        <p class="section-subtitle">Pronađite svoj savršeni dom</p>
-
-        <div class="row g-4">
-            @foreach (var apartment in Model)
+        <a href="~/assets/images/tlocrt_prizemlje.png" data-toggle="lightbox" data-size="fullscreen">
+            <img src="~/assets/images/tlocrt_prizemlje.png" style="max-width: 100%;" id="floor-plan-image" />
+        </a>
+        <div class="row my-3 g-4">
+            @foreach (var apartment in Model.Where(a => a.Floor.Contains("Prizemlje")))
             {
                 <div class="col-md-6 col-lg-4">
                     @if (apartment.IsAvailable)
@@ -168,7 +168,7 @@
                                         <p class="mt-2">Nema slike</p>
                                     </div>
                                 }
-                              
+
                             </div>
                             <div class="apartment-card-body">
                                 <h3 class="apartment-card-title">@apartment.Title</h3>
@@ -189,6 +189,169 @@
                     }
                 </div>
             }
+
+        </div>
+
+        <a href="~/assets/images/tlocrt_prizemlje.png" data-toggle="lightbox" data-size="fullscreen">
+            <img src="~/assets/images/tlocrt_prizemlje.png" style="max-width: 100%;" id="floor-plan-image" />
+        </a>
+        <div class="row my-3 g-4">
+            @foreach (var apartment in Model.Where(a => a.Floor.Contains("1. Kat")))
+            {
+                <div class="col-md-6 col-lg-4">
+                    @if (apartment.IsAvailable)
+                    {
+                        <a href="@Url.Action("ApartmentDetails", "Home", new { id = apartment.Id })" class="text-decoration-none">
+                            <div class="apartment-card">
+                                <div class="apartment-card-image">
+                                    @if (!string.IsNullOrEmpty(apartment.ImageUrl))
+                                    {
+                                        <img src="@apartment.ImageUrl" alt="@apartment.Title">
+                                    }
+                                    else
+                                    {
+                                        <div class="placeholder-image">
+                                            <i class="fas fa-home fa-3x"></i>
+                                            <p class="mt-2">Nema slike</p>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="apartment-card-body">
+                                    <h3 class="apartment-card-title">@apartment.Title</h3>
+                                    <p class="apartment-card-subtitle">@apartment.Rooms</p>
+                                    <div class="apartment-info">
+                                        <div class="apartment-feature">
+                                            <i class="fas fa-expand"></i>
+                                            <span>@apartment.SurfaceArea</span>
+                                        </div>
+                                        <div class="apartment-feature">
+                                            <i class="fas fa-layer-group"></i>
+                                            <span>@apartment.Floor</span>
+                                        </div>
+                                    </div>
+                                    <p class="apartment-price">€@apartment.Price.ToString("N0")</p>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <div class="apartment-card apartment-sold">
+                            <div class="apartment-card-image">
+                                @if (!string.IsNullOrEmpty(apartment.ImageUrl))
+                                {
+                                    <img src="@apartment.ImageUrl" alt="@apartment.Title">
+                                }
+                                else
+                                {
+                                    <div class="placeholder-image">
+                                        <i class="fas fa-home fa-3x"></i>
+                                        <p class="mt-2">Nema slike</p>
+                                    </div>
+                                }
+
+                            </div>
+                            <div class="apartment-card-body">
+                                <h3 class="apartment-card-title">@apartment.Title</h3>
+                                <p class="apartment-card-subtitle">@apartment.Rooms</p>
+                                <div class="apartment-info">
+                                    <div class="apartment-feature">
+                                        <i class="fas fa-expand"></i>
+                                        <span>@apartment.SurfaceArea</span>
+                                    </div>
+                                    <div class="apartment-feature">
+                                        <i class="fas fa-layer-group"></i>
+                                        <span>@apartment.Floor</span>
+                                    </div>
+                                </div>
+                                <p class="apartment-price">€@apartment.Price.ToString("N0")</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+        </div>
+
+        <a href="~/assets/images/tlocrt_prizemlje.png" data-toggle="lightbox" data-size="fullscreen">
+            <img src="~/assets/images/tlocrt_prizemlje.png" style="max-width: 100%;" id="floor-plan-image" />
+        </a>
+        <div class="row my-3 g-4">
+            @foreach (var apartment in Model.Where(a => a.Floor.Contains("2. Kat")))
+            {
+                <div class="col-md-6 col-lg-4">
+                    @if (apartment.IsAvailable)
+                    {
+                        <a href="@Url.Action("ApartmentDetails", "Home", new { id = apartment.Id })" class="text-decoration-none">
+                            <div class="apartment-card">
+                                <div class="apartment-card-image">
+                                    @if (!string.IsNullOrEmpty(apartment.ImageUrl))
+                                    {
+                                        <img src="@apartment.ImageUrl" alt="@apartment.Title">
+                                    }
+                                    else
+                                    {
+                                        <div class="placeholder-image">
+                                            <i class="fas fa-home fa-3x"></i>
+                                            <p class="mt-2">Nema slike</p>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="apartment-card-body">
+                                    <h3 class="apartment-card-title">@apartment.Title</h3>
+                                    <p class="apartment-card-subtitle">@apartment.Rooms</p>
+                                    <div class="apartment-info">
+                                        <div class="apartment-feature">
+                                            <i class="fas fa-expand"></i>
+                                            <span>@apartment.SurfaceArea</span>
+                                        </div>
+                                        <div class="apartment-feature">
+                                            <i class="fas fa-layer-group"></i>
+                                            <span>@apartment.Floor</span>
+                                        </div>
+                                    </div>
+                                    <p class="apartment-price">€@apartment.Price.ToString("N0")</p>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <div class="apartment-card apartment-sold">
+                            <div class="apartment-card-image">
+                                @if (!string.IsNullOrEmpty(apartment.ImageUrl))
+                                {
+                                    <img src="@apartment.ImageUrl" alt="@apartment.Title">
+                                }
+                                else
+                                {
+                                    <div class="placeholder-image">
+                                        <i class="fas fa-home fa-3x"></i>
+                                        <p class="mt-2">Nema slike</p>
+                                    </div>
+                                }
+
+                            </div>
+                            <div class="apartment-card-body">
+                                <h3 class="apartment-card-title">@apartment.Title</h3>
+                                <p class="apartment-card-subtitle">@apartment.Rooms</p>
+                                <div class="apartment-info">
+                                    <div class="apartment-feature">
+                                        <i class="fas fa-expand"></i>
+                                        <span>@apartment.SurfaceArea</span>
+                                    </div>
+                                    <div class="apartment-feature">
+                                        <i class="fas fa-layer-group"></i>
+                                        <span>@apartment.Floor</span>
+                                    </div>
+                                </div>
+                                <p class="apartment-price">€@apartment.Price.ToString("N0")</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
         </div>
 
         @if (!Model.Any())

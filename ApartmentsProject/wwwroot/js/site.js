@@ -11,6 +11,11 @@
         initializeTooltips();
         initializeAdminModals();
         setCurrentYear();
+
+
+        //$('img[usemap]').rwdImageMaps();
+        //createApartmentOverlays();
+
     });
 
     // Navbar scroll effect
@@ -299,6 +304,111 @@
             });
         });
     }
+
+    //function createApartmentOverlays() {
+    //    const image = document.getElementById('floor-plan-image');
+    //    const map = document.querySelector('map[name="image-map-prizemlje"]');
+
+    //    // Create a wrapper div for positioning context
+    //    const wrapper = document.createElement('div');
+    //    wrapper.style.position = 'relative';
+    //    wrapper.style.display = 'inline-block';
+    //    wrapper.style.width = '100%';
+
+    //    // Wrap the image
+    //    image.parentNode.insertBefore(wrapper, image);
+    //    wrapper.appendChild(image);
+
+    //    // Wait for image to load to get actual dimensions
+    //    image.onload = function () {
+    //        createOverlays();
+    //    };
+
+    //    // If image is already loaded
+    //    if (image.complete) {
+    //        createOverlays();
+    //    }
+
+    //    function createOverlays() {
+    //        // Get scaling factors
+    //        const scaleX = image.offsetWidth / image.naturalWidth;
+    //        const scaleY = image.offsetHeight / image.naturalHeight;
+
+    //        const imageWidth = image.offsetWidth;
+    //        const imageHeight = image.offsetHeight;
+
+    //        console.log('Scale factors:', { scaleX, scaleY });
+    //        console.log('Image dimensions:', {
+    //            natural: { width: image.naturalWidth, height: image.naturalHeight },
+    //            displayed: { width: imageWidth, height: imageHeight }
+    //        });
+
+    //        // Remove existing overlays
+    //        wrapper.querySelectorAll('.apartment-overlay').forEach(el => el.remove());
+
+    //        // Create overlays for each area
+    //        const areas = map.querySelectorAll('area');
+    //        areas.forEach(area => {
+    //            const coords = area.getAttribute('coords').split(',').map(Number);
+    //            const shape = area.getAttribute('shape');
+    //            const apartment = area.getAttribute('data-apartment');
+
+    //            console.log(`${apartment} coords:`, coords, 'shape:', shape);
+
+    //            const overlay = document.createElement('div');
+    //            overlay.className = 'apartment-overlay';
+    //            overlay.dataset.apartment = apartment;
+    //            overlay.textContent = apartment;
+
+    //            let leftPx, topPx, widthPx, heightPx;
+
+    //            if (shape === 'rect') {
+    //                const x1 = coords[0];
+    //                const y1 = coords[1];
+    //                const x2 = coords[2];
+    //                const y2 = coords[3];
+
+    //                // Apply scaling first
+    //                leftPx = Math.min(x1, x2) * scaleX;
+    //                topPx = Math.min(y1, y2) * scaleY;
+    //                widthPx = Math.abs(x2 - x1) * scaleX;
+    //                heightPx = Math.abs(y2 - y1) * scaleY;
+
+    //            } else if (shape === 'poly') {
+    //                const xs = coords.filter((_, i) => i % 2 === 0);
+    //                const ys = coords.filter((_, i) => i % 2 === 1);
+
+    //                // Apply scaling first
+    //                leftPx = Math.min(...xs) * scaleX;
+    //                topPx = Math.min(...ys) * scaleY;
+    //                widthPx = (Math.max(...xs) - Math.min(...xs)) * scaleX;
+    //                heightPx = (Math.max(...ys) - Math.min(...ys)) * scaleY;
+    //            }
+
+    //            // Convert scaled pixels to percentages
+    //            const left = (leftPx / imageWidth) * 100;
+    //            const top = (topPx / imageHeight) * 100;
+    //            const width = (widthPx / imageWidth) * 100;
+    //            const height = (heightPx / imageHeight) * 100;
+
+    //            overlay.style.position = 'absolute';
+    //            overlay.style.left = left + '%';
+    //            overlay.style.top = top + '%';
+    //            overlay.style.width = width + '%';
+    //            overlay.style.height = height + '%';
+
+    //            wrapper.appendChild(overlay);
+
+    //            console.log(`${apartment} final:`, {
+    //                left: left.toFixed(2) + '%',
+    //                top: top.toFixed(2) + '%',
+    //                width: width.toFixed(2) + '%',
+    //                height: height.toFixed(2) + '%'
+    //            });
+    //        });
+    //    }
+    //}
+
 
     // Admin modal functions (attach to window object so they're globally accessible)
     window.openApartmentModal = function (id = 0) {
